@@ -1,0 +1,11 @@
+{
+    "catalog-title": "Wikidata",
+    "catalog-description": "Wikidata is a free linked database that can be read and edited by both humans and machines. \nWikidata acts as central storage for the structured data of its Wikimedia sister projects including Wikipedia, Wikivoyage, Wikisource, and others.",
+    "dataset-live-title": "Wikidata Live",
+    "dataset-live-description": "The live version of the Wikidata dataset, entities and properties.",
+    "dataset-dump-title": "Wikidata JSON Dump of $1",
+    "dataset-dump-description": "A static JSON dump of Wikidata for the given date",
+    "distribution-ld-description": "The Linked Data endpoint. Format is resolved through content negotiation.",
+    "distribution-api-description": "The MediaWiki API endpoint. Format is given through the \"format\" parameter. Only non-depricated formats are listed.",
+    "distribution-dump-description": "A gziped JSON file"
+}

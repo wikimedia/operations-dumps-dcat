@@ -1,0 +1,36 @@
+{
+    "api-access": true,
+    "json-dump": true,
+    "uri": "http://www.wikidata.org/about",
+    "catalog-homepage": "http://wikidata.org",
+    "catalog-issued": "YYYY-MM-DD",
+    "catalog-license": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "publisher": {
+        "name": "Wikimedia Foundation",
+        "homepage": "http://wikimediafoundation.org/",
+        "email": "mailto:info@wikidata.org",
+        "publisherType": "NonProfitOrganisation"
+    },
+    "contactPoint": {
+        "vcardType" : "Organization",
+        "name": "Wikidata information team",
+        "email": "info@wikidata.org"
+    },
+    "ld-info": {
+        "accessURL": "http://www.wikidata.org/entity/",
+        "mediatype": ["application/json", "application/n-triples", "application/rdf+xml", "text/turtle", "application/xml", "text/html"],
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "api-info": {
+        "accessURL": "https://www.wikidata.org/w/api.php",
+        "mediatype": ["application/json", "application/x-php", "application/xml"],
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "dump-info": {
+        "accessURL": "https://dumps.wikimedia.org/other/wikidata/$1",
+        "mediatype": ["application/json"],
+        "license": "http://creativecommons.org/publicdomain/zero/1.0/"
+    }
+}
+
+

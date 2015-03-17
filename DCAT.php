@@ -12,6 +12,7 @@
  * KNOWN ISSUES:
  * assumes i18n file name = lang code = iso639-1 code
  * assumes only one contactPoint and one publisher
+ * assumes same keywords for all datasets
  */
 
 // an easy way of passing data around
@@ -76,46 +77,50 @@ function dumpDistributionExtras(XMLWriter $xml, $data, $dumpDate){
 
 /**
  * construct a LiveDistribution for a given prefix
+ * the DCAT-specification requires each format to be a separate distribution
  * dumpDate = null for live data
  */
 function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate){
-    $id = $data['config']['uri'].'#'.$distribId.$dumpDate;
+    $ids = array ();
     
-    $xml->startElementNS('rdf', 'Description', null);
-    $xml->writeAttributeNS('rdf', 'about', null, $id);
-
-    $xml->startElementNS('rdf', 'type', null);
-    $xml->writeAttributeNS('rdf', 'resource', null, 'http://www.w3.org/ns/dcat#Distribution');
-    $xml->endElement();
+    foreach ( $data['config'][$prefix.'-info']['mediatype'] as $format => $mediatype ) {
+        $id = $data['config']['uri'].'#'.$distribId.$dumpDate.$format;
+        array_push($ids, $id);
+        
+        $xml->startElementNS('rdf', 'Description', null);
+        $xml->writeAttributeNS('rdf', 'about', null, $id);
     
-    $xml->startElementNS('dcterms', 'license', null);
-    $xml->writeAttributeNS('rdf', 'resource', null, $data['config'][$prefix.'-info']['license']);
-    $xml->endElement();
+        $xml->startElementNS('rdf', 'type', null);
+        $xml->writeAttributeNS('rdf', 'resource', null, 'http://www.w3.org/ns/dcat#Distribution');
+        $xml->endElement();
+        
+        $xml->startElementNS('dcterms', 'license', null);
+        $xml->writeAttributeNS('rdf', 'resource', null, $data['config'][$prefix.'-info']['license']);
+        $xml->endElement();
+        
+        if ( is_null( $dumpDate ) ) {
+            $xml->startElementNS('dcat', 'accessURL', null);
+            $xml->writeAttributeNS('rdf', 'resource', null, $data['config'][$prefix.'-info']['accessURL']);
+            $xml->endElement();
+        }
+        else {
+            dumpDistributionExtras($xml, $data, $dumpDate);
+        }
     
-    if ( is_null( $dumpDate ) ) {
-        $xml->startElementNS('dcat', 'accessURL', null);
-        $xml->writeAttributeNS('rdf', 'resource', null, $data['config'][$prefix.'-info']['accessURL']);
+        $xml->writeElementNS('dcterms', 'format', null, $mediatype);
+        
+        // add description in each language
+        foreach ( $data['i18n'] as $key => $value ) {
+            $xml->startElementNS('dcterms', 'description', null);
+            $xml->writeAttributeNS('xml', 'lang', null, $key);
+            $xml->text($data['i18n'][$key]['distribution-'.$prefix.'-description']);
+            $xml->endElement();
+        }
+    
         $xml->endElement();
     }
-    else {
-        dumpDistributionExtras($xml, $data, $dumpDate);
-    }
-
-    // add mediatypes             
-    foreach ( $data['config'][$prefix.'-info']['mediatype'] as $key => $value ) {
-        $xml->writeElementNS('dcterms', 'format', null, $value);
-    }
     
-    // add description in each language
-    foreach ( $data['i18n'] as $key => $value ) {
-        $xml->startElementNS('dcterms', 'description', null);
-        $xml->writeAttributeNS('xml', 'lang', null, $key);
-        $xml->text($data['i18n'][$key]['distribution-'.$prefix.'-description']);
-        $xml->endElement();
-    }
-
-    $xml->endElement();
-    return $id;
+    return $ids;
 }
 
 /**
@@ -151,6 +156,11 @@ function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId, $publisher, 
         $xml->endElement();
     }
     
+    // add keywords
+    foreach ( $data['config']['keywords'] as $key => $keyword ) {
+        $xml->writeElementNS('dcat', 'keyword', null, $keyword);
+    }
+    
     // add title and description in each language
     foreach ( $data['i18n'] as $key => $value ) {
         $xml->startElementNS('dcterms', 'title', null);
@@ -173,7 +183,7 @@ function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId, $publisher, 
     // add datasets            
     foreach ( $distribution as $key => $value ) {
         $xml->startElementNS('dcat', 'distribution', null);
-        $xml->writeAttributeNS('rdf', 'resource', null, $data['config']['uri'].'#'.$value);
+        $xml->writeAttributeNS('rdf', 'resource', null, $value);
         $xml->endElement();
     }
     
@@ -232,7 +242,7 @@ function writeContactPoint(XMLWriter $xml, $data, $contactPoint){
  */
 function writeCatalog(XMLWriter $xml, $data, $publisher, $dataset){
     $xml->startElementNS('rdf', 'Description', null);
-    $xml->writeAttributeNS('rdf', 'about', null, $data['config']['uri']);
+    $xml->writeAttributeNS('rdf', 'about', null, $data['config']['uri'].'#catalog');
     
     $xml->startElementNS('rdf', 'type', null);
     $xml->writeAttributeNS('rdf', 'resource', null, 'http://www.w3.org/ns/dcat#Catalog');
@@ -268,7 +278,7 @@ function writeCatalog(XMLWriter $xml, $data, $publisher, $dataset){
     // add datasets              
     foreach ( $dataset as $key => $value ) {
         $xml->startElementNS('dcat', 'dataset', null);
-        $xml->writeAttributeNS('rdf', 'resource', null, $data['config']['uri'].'#'.$value);
+        $xml->writeAttributeNS('rdf', 'resource', null, $value);
         $xml->endElement();
     }
     
@@ -296,7 +306,7 @@ function outputXml($dumps){
     $xml->startDocument('1.0', 'UTF-8');
     $xml->startElementNS('rdf', 'RDF', null);
     $xml->writeAttributeNS('xmlns', 'rdf', null, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
-    $xml->writeAttributeNS('xmlns', 'xsi', null, 'http://purl.org/dc/terms/');
+    $xml->writeAttributeNS('xmlns', 'dcterms', null, 'http://purl.org/dc/terms/');
     $xml->writeAttributeNS('xmlns', 'dcat', null, 'http://www.w3.org/ns/dcat#');
     $xml->writeAttributeNS('xmlns', 'foaf', null, 'http://xmlns.com/foaf/0.1/');
     $xml->writeAttributeNS('xmlns', 'adms', null, 'http://www.w3.org/ns/adms#');
@@ -306,26 +316,25 @@ function outputXml($dumps){
     writePublisher($xml, $data, $data['ids']['publisher']);
     writeContactPoint($xml, $data, $data['ids']['contactPoint']);
     
-    $dataset = array ($data['ids']['liveDataset'],);
+    $dataset = array ();
     
     // Live dataset and distributions
-    $liveDistribs = array ();
-    array_push($liveDistribs,
-        writeDistribution($xml, $data, $data['ids']['liveDistribLD'], 'ld', null)
-    );
+    $liveDistribs = writeDistribution($xml, $data, $data['ids']['liveDistribLD'], 'ld', null);
     if ( $data['config']['api-enabled'] ) {
-        array_push($liveDistribs,
+        $liveDistribs = array_merge($liveDistribs,
             writeDistribution($xml, $data, $data['ids']['liveDistribAPI'], 'api', null)
         );
     }
-    writeDataset($xml, $data, null, $data['ids']['liveDataset'], $data['ids']['publisher'], $data['ids']['contactPoint'], $liveDistribs);
+    array_push($dataset,
+        writeDataset($xml, $data, null, $data['ids']['liveDataset'], $data['ids']['publisher'], $data['ids']['contactPoint'], $liveDistribs)
+    );
     
     // Dump dataset and distributions
     if ( $data['config']['dumps-enabled'] ) {
         foreach ( $data['dumps'] as $key => $value ) {
-            $distId = writeDistribution($xml, $data, $data['ids']['dumpDistribPrefix'], 'dump', $key);
+            $distIds = writeDistribution($xml, $data, $data['ids']['dumpDistribPrefix'], 'dump', $key);
             array_push($dataset,
-                writeDataset($xml, $data, $key, $data['ids']['dumpDatasetPrefix'], $data['ids']['publisher'], $data['ids']['contactPoint'], array($distId, ))
+                writeDataset($xml, $data, $key, $data['ids']['dumpDatasetPrefix'], $data['ids']['publisher'], $data['ids']['contactPoint'], $distIds)
             );
         }
     }

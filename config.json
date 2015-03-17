@@ -5,6 +5,7 @@
     "catalog-homepage": "http://wikidata.org",
     "catalog-issued": "YYYY-MM-DD",
     "catalog-license": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "keywords": ["data store", "semantic", "knowledgebase", "Wikimedia", "user generated content", "UGC", "Wikipedia", "Wikidata"],
     "publisher": {
         "name": "Wikimedia Foundation",
         "homepage": "http://wikimediafoundation.org/",
@@ -18,17 +19,30 @@
     },
     "ld-info": {
         "accessURL": "http://www.wikidata.org/entity/",
-        "mediatype": ["application/json", "application/n-triples", "application/rdf+xml", "text/turtle", "application/xml", "text/html"],
+        "mediatype": {
+            "json": "application/json",
+            "n3": "application/n-triples",
+            "rdf": "application/rdf+xml",
+            "turtle": "text/turtle",
+            "xml": "application/xml",
+            "html": "text/html"
+        },
         "license": "http://creativecommons.org/publicdomain/zero/1.0/"
     },
     "api-info": {
         "accessURL": "https://www.wikidata.org/w/api.php",
-        "mediatype": ["application/json", "application/x-php", "application/xml"],
+        "mediatype": {
+            "json": "application/json",
+            "php": "application/x-php",
+            "xml": "application/xml"
+        },
         "license": "http://creativecommons.org/publicdomain/zero/1.0/"
     },
     "dump-info": {
         "accessURL": "https://dumps.wikimedia.org/other/wikidata/$1",
-        "mediatype": ["application/json"],
+        "mediatype": {
+            "json": "application/json"
+        },
         "license": "http://creativecommons.org/publicdomain/zero/1.0/"
     }
 }

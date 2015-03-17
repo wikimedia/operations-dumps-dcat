@@ -3,7 +3,7 @@
     "dumps-enabled": true,
     "uri": "http://www.wikidata.org/about",
     "catalog-homepage": "http://wikidata.org",
-    "catalog-issued": "YYYY-MM-DD",
+    "catalog-issued": "2012-10-30",
     "catalog-license": "http://creativecommons.org/publicdomain/zero/1.0/",
     "keywords": ["data store", "semantic", "knowledgebase", "Wikimedia", "user generated content", "UGC", "Wikipedia", "Wikidata"],
     "publisher": {

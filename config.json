@@ -1,6 +1,6 @@
 {
-    "api-access": true,
-    "json-dump": true,
+    "api-enabled": true,
+    "dumps-enabled": true,
     "uri": "http://www.wikidata.org/about",
     "catalog-homepage": "http://wikidata.org",
     "catalog-issued": "YYYY-MM-DD",

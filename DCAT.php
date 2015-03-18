@@ -3,9 +3,8 @@
  * DCAT-AP generation for Wikibase
  *
  * @author Lokal_Profil
- * @licence GNU General Public Licence 2.0 or later
+ * @licence MIT
  * 
- * TODO: Validate that loaded i18n files contain all keys
  * TODO: Replace hardcoded node/dataset ids?
  * TODO: Deal with i18n strings being to wikidata focused
  * 
@@ -110,11 +109,13 @@ function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate
         $xml->writeElementNS('dcterms', 'format', null, $mediatype);
         
         // add description in each language
-        foreach ( $data['i18n'] as $key => $value ) {
-            $xml->startElementNS('dcterms', 'description', null);
-            $xml->writeAttributeNS('xml', 'lang', null, $key);
-            $xml->text($data['i18n'][$key]['distribution-'.$prefix.'-description']);
-            $xml->endElement();
+        foreach ( $data['i18n'] as $langCode => $langData ) {
+            if (array_key_exists('distribution-'.$prefix.'-description', $langData) ) {
+                $xml->startElementNS('dcterms', 'description', null);
+                $xml->writeAttributeNS('xml', 'lang', null, $langCode);
+                $xml->text($langData['distribution-'.$prefix.'-description']);
+                $xml->endElement();
+            }
         }
     
         $xml->endElement();
@@ -162,22 +163,26 @@ function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId, $publisher, 
     }
     
     // add title and description in each language
-    foreach ( $data['i18n'] as $key => $value ) {
-        $xml->startElementNS('dcterms', 'title', null);
-        $xml->writeAttributeNS('xml', 'lang', null, $key);
-        if ( $type === 'live' ) {
-            $xml->text($data['i18n'][$key]['dataset-live-title']);
+    foreach ( $data['i18n'] as $langCode => $langData ) {
+        if (array_key_exists('dataset-'.$type.'-title', $langData) ) {
+            $xml->startElementNS('dcterms', 'title', null);
+            $xml->writeAttributeNS('xml', 'lang', null, $langCode);
+            if ( $type === 'live' ) {
+                $xml->text($langData['dataset-live-title']);
+            }
+            else {
+                $xml->text(
+                    str_replace('$1', $dumpDate, $langData['dataset-dump-title'])
+               );
+            }
+            $xml->endElement();
         }
-        else {
-            $xml->text(
-                str_replace('$1', $dumpDate, $data['i18n'][$key]['dataset-dump-title'])
-           );
+        if (array_key_exists('dataset-'.$type.'-description', $langData) ) {
+            $xml->startElementNS('dcterms', 'description', null);
+            $xml->writeAttributeNS('xml', 'lang', null, $langCode);
+            $xml->text($langData['dataset-'.$type.'-description']);
+            $xml->endElement();
         }
-        $xml->endElement();
-        $xml->startElementNS('dcterms', 'description', null);
-        $xml->writeAttributeNS('xml', 'lang', null, $key);
-        $xml->text($data['i18n'][$key]['dataset-'.$type.'-description']);
-        $xml->endElement();
     }
     
     // add datasets            
@@ -261,18 +266,23 @@ function writeCatalog(XMLWriter $xml, $data, $publisher, $dataset){
     $xml->endElement();
 
     // add language, title and description in each language
-    foreach ( $data['i18n'] as $key => $value ) {
+    foreach ( $data['i18n'] as $langCode => $langData ) {
         $xml->startElementNS('dcterms', 'language', null);
-        $xml->writeAttributeNS('rdf', 'resource', null, 'http://id.loc.gov/vocabulary/iso639-1/'.$key);
+        $xml->writeAttributeNS('rdf', 'resource', null, 'http://id.loc.gov/vocabulary/iso639-1/'.$langCode);
         $xml->endElement();
-        $xml->startElementNS('dcterms', 'title', null);
-        $xml->writeAttributeNS('xml', 'lang', null, $key);
-        $xml->text($data['i18n'][$key]['catalog-title']);
-        $xml->endElement();
-        $xml->startElementNS('dcterms', 'description', null);
-        $xml->writeAttributeNS('xml', 'lang', null, $key);
-        $xml->text($data['i18n'][$key]['catalog-description']);
-        $xml->endElement();
+        
+        if (array_key_exists('catalog-title', $langData) ) {
+            $xml->startElementNS('dcterms', 'title', null);
+            $xml->writeAttributeNS('xml', 'lang', null, $langCode);
+            $xml->text($langData['catalog-title']);
+            $xml->endElement();
+        }
+        if (array_key_exists('catalog-description', $langData) ) {
+            $xml->startElementNS('dcterms', 'description', null);
+            $xml->writeAttributeNS('xml', 'lang', null, $langCode);
+            $xml->text($langData['catalog-description']);
+            $xml->endElement();
+        }
     }
     
     // add datasets              

@@ -5,13 +5,6 @@
  * @author Lokal_Profil
  * @licence MIT
  *
- * TODO: Replace hardcoded node/dataset ids?
- * TODO: Deal with i18n strings being to wikidata focused
- *
- * KNOWN ISSUES:
- * assumes i18n file name = lang code = iso639-1 code
- * assumes only one contactPoint and one publisher
- * assumes same keywords for all datasets
  */
 
 // an easy way of passing data around

@@ -1,0 +1,39 @@
+{
+    "directory": "Path to directory of dumps and final dcat file",
+    "api-enabled": "Is API access activated for the MediaWiki installation?, boolean",
+    "dumps-enabled": "Is JSON dump generation activated for the WikiBase installation?, boolean",
+    "uri": "URL used as basis for rdf identifiers, e.g. http://www.example.org/about",
+    "catalog-homepage": "URL for catalog homepage, e.g. http://www.example.org",
+    "catalog-issued": "ISO data at which the catalog was first issued, e.g. 2000-12-24 ",
+    "catalog-license": "License of the catalog, i.e. of the dcat-ap file itself, e.g. http://creativecommons.org/publicdomain/zero/1.0/",
+    "keywords": "Array of keywords describing all of the datasets",
+    "publisher": {
+        "name": "Name of the publisher",
+        "homepage": "URL for the publisher's homepage",
+        "email": "Contact e-mail for publisher, should be a function address, e.g. info@example.org",
+        "publisherType": "Publisher type according to http://purl.org/adms/publishertype/"
+    },
+    "contactPoint": {
+        "vcardType" : "Type of contact point: Organization or Individual",
+        "name": "Name of the contact point",
+        "email": "E-mail for contact point, should ideally be a function address, e.g. support@example.org"
+    },
+    "ld-info": {
+        "accessURL": "URL to the content negotiation endpoint of the WikiBase installation, e.g. http://www.example.org/entity/",
+        "mediatype": "Object of media types available through content negotiation in the format name:media-type (per http://www.iana.org/assignments/media-types/)",
+        "license": "License of the data in the distribution, e.g. http://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    "api-info": {
+        "accessURL": "URL to the MediaWiki API endpoint of the wiki, e.g. http://www.example.org/w/api.php",
+        "mediatype": "Object of non-deprecated formats available thorough the API, see ld-info:mediatype for formatting",
+        "license": "See ld-info:license"
+    },
+    "dump-info": {
+        "accessURL": "URL to the directory where the .json.gz files reside ($1 is replaced on the fly by the actual .json.gz file) , e.g. http://example.org/dumps/$1",
+        "mediatype": {
+            "json": "application/json"
+        },
+        "license": "See ld-info:license"
+    }
+}
+

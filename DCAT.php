@@ -44,6 +44,7 @@ function makeDataBlob(){
     // stick loaded data into blob
     $data = array (
         "config" => $config,
+        "dumps" => null,
         "i18n" => $i18n,
         "ids" => $ids,
     );
@@ -404,23 +405,29 @@ function scanDump($dirname){
 /**
  * Scan dump directory for dump files (if any) and
  * create dcatap.rdf in the same directory
+ * @param string $directory: directory name, overrides config setting if provided
  */
-function run(){
+function run($directory=null){
     // Load config variables and i18n a data blob
     $data = makeDataBlob();
 
+    // Load directory from config, unless overridden
+    if ( is_null( $directory ) ) {
+        $directory = $data['config']['directory'];
+    }
+
     // test if dir exists
-    if ( !is_dir( $data['config']['directory'] ) ) {
-        echo $data['config']['directory'].' is not a valid directory';
+    if ( !is_dir( $directory ) ) {
+        echo $directory.' is not a valid directory';
         return;
     }
 
     // add dump data to data blob
-    $data['dumps'] = scanDump($data['config']['directory']);
+    $data['dumps'] = scanDump($directory);
 
     // create xml string from data blob
     $xml = outputXml($data);
 
-    file_put_contents($data['config']['directory'].'/dcatap.rdf', $xml);
+    file_put_contents($directory.'/dcatap.rdf', $xml);
 }
 ?>

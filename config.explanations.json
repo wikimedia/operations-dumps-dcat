@@ -7,7 +7,7 @@
     "catalog-issued": "ISO data at which the catalog was first issued, e.g. 2000-12-24 ",
     "catalog-license": "License of the catalog, i.e. of the dcat-ap file itself, e.g. http://creativecommons.org/publicdomain/zero/1.0/",
     "keywords": "Array of keywords describing all of the datasets",
-    "themes": "Array of thematic ids in accordance with http://eurovoc.europa.eu/",
+    "themes": "Array of thematic ids in accordance with http://eurovoc.europa.eu/, e.g. "2191" for http://eurovoc.europa.eu/2191",
     "publisher": {
         "name": "Name of the publisher",
         "homepage": "URL for the publisher's homepage",

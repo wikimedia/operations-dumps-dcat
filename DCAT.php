@@ -176,6 +176,13 @@ function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId, $publisher, 
         $xml->writeElementNS('dcat', 'keyword', null, $keyword);
     }
 
+    // add themes
+    foreach ( $data['config']['themes'] as $key => $keyword ) {
+        $xml->startElementNS('dcat', 'theme', null);
+        $xml->writeAttributeNS('rdf', 'resource', null, 'http://eurovoc.europa.eu/'.$keyword);
+        $xml->endElement();
+    }
+
     // add title and description in each language
     foreach ( $data['i18n'] as $langCode => $langData ) {
         if (array_key_exists('dataset-'.$type.'-title', $langData) ) {
@@ -279,6 +286,10 @@ function writeCatalog(XMLWriter $xml, $data, $publisher, $dataset){
 
     $xml->startElementNS('dcterms', 'license', null);
     $xml->writeAttributeNS('rdf', 'resource', null, $data['config']['catalog-license']);
+    $xml->endElement();
+
+    $xml->startElementNS('dcat', 'themeTaxonomy', null);
+    $xml->writeAttributeNS('rdf', 'resource', null, 'http://eurovoc.europa.eu/');
     $xml->endElement();
 
     $xml->writeElementNS('foaf', 'homepage', null, 'https://www.wikidata.org');

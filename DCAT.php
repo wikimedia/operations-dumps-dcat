@@ -19,7 +19,7 @@ function makeDataBlob(){
 	$langs = array ();
 	foreach ( scandir( 'i18n' ) as $key  => $filename ) {
 		if ( substr( $filename, -strlen( '.json' ) ) === '.json' && $filename !== 'qqq.json' ) {
-			$langs[substr( $filename, 0, -strlen( '.json' ) )] = 'i18n/'.$filename;
+			$langs[substr( $filename, 0, -strlen( '.json' ) )] = "i18n/$filename";
 		}
 	}
 
@@ -32,11 +32,11 @@ function makeDataBlob(){
 	// load catalog i18n info from URL and add to i18n object
 	$i18nJSON = json_decode( file_get_contents( $config['catalog-info'] ), true );
 	foreach ( array_keys( $i18n ) as $langCode ) {
-		if ( array_key_exists( $langCode.'-title', $i18nJSON ) ) {
-			$i18n[$langCode]['catalog-title'] = $i18nJSON[$langCode.'-title'];
+		if ( array_key_exists( "$langCode-title", $i18nJSON ) ) {
+			$i18n[$langCode]['catalog-title'] = $i18nJSON["$langCode-title"];
 		}
-		if ( array_key_exists( $langCode.'-description', $i18nJSON ) ) {
-			$i18n[$langCode]['catalog-description'] = $i18nJSON[$langCode.'-description'];
+		if ( array_key_exists( "$langCode-description", $i18nJSON ) ) {
+			$i18n[$langCode]['catalog-description'] = $i18nJSON["$langCode-description"];
 		}
 	}
 
@@ -70,7 +70,7 @@ function makeDataBlob(){
  * @param string $dumpDate: the date of the dumpfile, null for live data
  */
 function dumpDistributionExtras(XMLWriter $xml, $data, $dumpDate){
-	$url = str_replace( '$1', $dumpDate.'json.gz', $data['config']['dump-info']['accessURL'] );
+	$url = str_replace( '$1', "$dumpDate.json.gz", $data['config']['dump-info']['accessURL'] );
 
 	$xml->startElementNS( 'dcat', 'accessURL', null );
 	$xml->writeAttributeNS( 'rdf', 'resource', null, $url );
@@ -101,7 +101,7 @@ function dumpDistributionExtras(XMLWriter $xml, $data, $dumpDate){
 function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate){
 	$ids = array ();
 
-	foreach ( $data['config'][$prefix.'-info']['mediatype'] as $format => $mediatype ) {
+	foreach ( $data['config']["$prefix-info"]['mediatype'] as $format => $mediatype ) {
 		$id = $data['config']['uri'].'#'.$distribId.$dumpDate.$format;
 		array_push( $ids, $id );
 
@@ -113,12 +113,12 @@ function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate
 		$xml->endElement();
 
 		$xml->startElementNS( 'dcterms', 'license', null );
-		$xml->writeAttributeNS( 'rdf', 'resource', null, $data['config'][$prefix.'-info']['license'] );
+		$xml->writeAttributeNS( 'rdf', 'resource', null, $data['config']["$prefix-info"]['license'] );
 		$xml->endElement();
 
 		if ( is_null( $dumpDate ) ) {
 			$xml->startElementNS( 'dcat', 'accessURL', null );
-			$xml->writeAttributeNS( 'rdf', 'resource', null, $data['config'][$prefix.'-info']['accessURL'] );
+			$xml->writeAttributeNS( 'rdf', 'resource', null, $data['config']["$prefix-info"]['accessURL'] );
 			$xml->endElement();
 		}
 		else {
@@ -129,10 +129,10 @@ function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate
 
 		// add description in each language
 		foreach ( $data['i18n'] as $langCode => $langData ) {
-			if ( array_key_exists( 'distribution-'.$prefix.'-description', $langData ) ) {
+			if ( array_key_exists( "distribution-$prefix-description", $langData ) ) {
 				$xml->startElementNS( 'dcterms', 'description', null );
 				$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
-				$xml->text( $langData['distribution-'.$prefix.'-description'] );
+				$xml->text( $langData["distribution-$prefix-description"] );
 				$xml->endElement();
 			}
 		}
@@ -190,13 +190,13 @@ function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId, $publisher, 
 	// add themes
 	foreach ( $data['config']['themes'] as $key => $keyword ) {
 		$xml->startElementNS( 'dcat', 'theme', null );
-		$xml->writeAttributeNS( 'rdf', 'resource', null, 'http://eurovoc.europa.eu/'.$keyword );
+		$xml->writeAttributeNS( 'rdf', 'resource', null, "http://eurovoc.europa.eu/$keyword" );
 		$xml->endElement();
 	}
 
 	// add title and description in each language
 	foreach ( $data['i18n'] as $langCode => $langData ) {
-		if ( array_key_exists( 'dataset-'.$type.'-title', $langData ) ) {
+		if ( array_key_exists( "dataset-$type-title", $langData ) ) {
 			$xml->startElementNS( 'dcterms', 'title', null );
 			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
 			if ( $type === 'live' ) {
@@ -209,10 +209,10 @@ function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId, $publisher, 
 			}
 			$xml->endElement();
 		}
-		if ( array_key_exists( 'dataset-'.$type.'-description', $langData ) ) {
+		if ( array_key_exists( "dataset-$type-description", $langData ) ) {
 			$xml->startElementNS( 'dcterms', 'description', null );
 			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
-			$xml->text( $langData['dataset-'.$type.'-description'] );
+			$xml->text( $langData["dataset-$type-description"] );
 			$xml->endElement();
 		}
 	}
@@ -314,7 +314,7 @@ function writeCatalog(XMLWriter $xml, $data, $publisher, $dataset){
 	// add language, title and description in each language
 	foreach ( $data['i18n'] as $langCode => $langData ) {
 		$xml->startElementNS( 'dcterms', 'language', null );
-		$xml->writeAttributeNS( 'rdf', 'resource', null, 'http://id.loc.gov/vocabulary/iso639-1/'.$langCode );
+		$xml->writeAttributeNS( 'rdf', 'resource', null, "http://id.loc.gov/vocabulary/iso639-1/$langCode" );
 		$xml->endElement();
 
 		if ( array_key_exists( 'catalog-title', $langData ) ) {
@@ -413,7 +413,7 @@ function scanDump($dirname){
 
 	foreach ( scandir( $dirname ) as $key  => $filename ) {
 		if ( substr( $filename, -strlen( $teststring ) ) === $teststring ) {
-			$info = stat( $dirname.'/'.$filename );
+			$info = stat( "$dirname/$filename" );
 			$dumps[substr( $filename, 0, -strlen( $teststring ) )] = array (
 				'timestamp' => gmdate( 'Y-m-d\TH:i:s', $info['mtime'] ),
 				'byteSize' => $info['size']
@@ -440,7 +440,7 @@ function run($directory=null){
 
 	// test if dir exists
 	if ( !is_dir( $directory ) ) {
-		echo $directory.' is not a valid directory';
+		echo "$directory is not a valid directory";
 		return;
 	}
 
@@ -450,6 +450,6 @@ function run($directory=null){
 	// create xml string from data blob
 	$xml = outputXml( $data );
 
-	file_put_contents( $directory.'/dcatap.rdf', $xml );
+	file_put_contents( "$directory/dcatap.rdf", $xml );
 }
 ?>

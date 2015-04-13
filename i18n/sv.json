@@ -2,8 +2,6 @@
 	"@metadata": {
 		"authors": ["Lokal_Profil"]
 	},
-    "catalog-title": "Wikidata",
-    "catalog-description": "Wikidata är en fri länkad databas som kan läsas och redigeras av både människor och maskiner. \nWikidata fungerar som ett centralt förvar av strukturerade data för sina systerprojekt vilka inkluderar Wikipedia, Wikivoyage, Wikisource, och fler.",
     "dataset-live-title": "Direkt åtkomst",
     "dataset-live-description": "The aktuella versionen av datan, inkluderande objekt och egenskaper. Endast icke-utfasade format listas för distributionerna.",
     "dataset-dump-title": "JSON-dump från $1",

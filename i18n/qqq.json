@@ -2,8 +2,6 @@
 	"@metadata": {
 		"authors": ["Lokal_Profil"]
 	},
-    "catalog-title": "The name of the catalog",
-    "catalog-description": "The description of the catalog",
     "dataset-live-title": "The title for the live access dataset",
     "dataset-live-description": "The description of the live access dataset. For terminology see https://www.wikidata.org/wiki/Wikidata:Glossary. For deprecation see https://en.wikipedia.org/wiki/Deprecation.",
     "dataset-dump-title": "The title for the JSON dump where $1 is the date of the dump in the format YYYYMMDD",

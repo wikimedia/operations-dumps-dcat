@@ -23,11 +23,23 @@ function makeDataBlob(){
         }
     }
 
-    // load i18n files
+    // load i18n files into i18n object
     $i18n = array ();
-    foreach ( $langs as $langCode => $filename) {
+    foreach ( $langs as $langCode => $filename ) {
         $i18n[$langCode] = json_decode(file_get_contents($filename), true);
     }
+
+    // load catalog i18n info from URL and add to i18n object
+    $i18nJSON = json_decode(file_get_contents($config['catalog-info']), true);
+    foreach ( array_keys($i18n) as $langCode ) {
+        if ( array_key_exists($langCode.'-title', $i18nJSON) ) {
+            $i18n[$langCode]['catalog-title'] = $i18nJSON[$langCode.'-title'];
+        }
+        if ( array_key_exists($langCode.'-description', $i18nJSON) ) {
+            $i18n[$langCode]['catalog-description'] = $i18nJSON[$langCode.'-description'];
+        }
+    }
+
 
     // hardcoded ids (for now at least)
     // issue #2

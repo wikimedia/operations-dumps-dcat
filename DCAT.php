@@ -107,7 +107,7 @@ function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate
 	$ids = array ();
 
 	foreach ( $data['config']["$prefix-info"]['mediatype'] as $format => $mediatype ) {
-		$id = $data['config']['uri'].'#'.$distribId.$dumpDate.$format;
+		$id = $data['config']['uri'] . '#' . $distribId . $dumpDate . $format;
 		array_push( $ids, $id );
 
 		$xml->startElementNS( 'rdf', 'Description', null );
@@ -170,7 +170,7 @@ function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId,
 		$type = 'live';
 	}
 
-	$id = $data['config']['uri'].'#'.$datasetId.$dumpDate;
+	$id = $data['config']['uri'] . '#' . $datasetId . $dumpDate;
 
 	$xml->startElementNS( 'rdf', 'Description', null );
 	$xml->writeAttributeNS( 'rdf', 'about', null, $id );
@@ -263,7 +263,8 @@ function writePublisher(XMLWriter $xml, $data, $publisher){
 
 	$xml->startElementNS( 'dcterms', 'type', null );
 	$xml->writeAttributeNS( 'rdf', 'resource', null,
-		'http://purl.org/adms/publishertype/'.$data['config']['publisher']['publisherType'] );
+		'http://purl.org/adms/publishertype/' .
+			$data['config']['publisher']['publisherType'] );
 	$xml->endElement();
 
 	$xml->writeElementNS( 'foaf', 'homepage', null,
@@ -271,7 +272,7 @@ function writePublisher(XMLWriter $xml, $data, $publisher){
 
 	$xml->startElementNS( 'vcard', 'hasEmail', null );
 	$xml->writeAttributeNS( 'rdf', 'resource', null,
-		'mailto:'.$data['config']['publisher']['email'] );
+		'mailto:' . $data['config']['publisher']['email'] );
 	$xml->endElement();
 
 	$xml->endElement();
@@ -290,12 +291,13 @@ function writeContactPoint(XMLWriter $xml, $data, $contactPoint){
 
 	$xml->startElementNS( 'rdf', 'type', null );
 	$xml->writeAttributeNS( 'rdf', 'resource', null,
-		'http://www.w3.org/2006/vcard/ns#'.$data['config']['contactPoint']['vcardType'] );
+		'http://www.w3.org/2006/vcard/ns#' .
+			$data['config']['contactPoint']['vcardType'] );
 	$xml->endElement();
 
 	$xml->startElementNS( 'vcard', 'hasEmail', null );
 	$xml->writeAttributeNS( 'rdf', 'resource', null,
-		'mailto:'.$data['config']['contactPoint']['email'] );
+		'mailto:' . $data['config']['contactPoint']['email'] );
 	$xml->endElement();
 
 	$xml->writeElementNS( 'vcard', 'fn', null,
@@ -315,7 +317,7 @@ function writeContactPoint(XMLWriter $xml, $data, $contactPoint){
 function writeCatalog(XMLWriter $xml, $data, $publisher, $dataset){
 	$xml->startElementNS( 'rdf', 'Description', null );
 	$xml->writeAttributeNS( 'rdf', 'about', null,
-		$data['config']['uri'].'#catalog' );
+		$data['config']['uri'] . '#catalog' );
 
 	$xml->startElementNS( 'rdf', 'type', null );
 	$xml->writeAttributeNS( 'rdf', 'resource', null,

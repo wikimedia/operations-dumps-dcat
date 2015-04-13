@@ -30,7 +30,7 @@ function makeDataBlob(){
 	}
 
 	// load catalog i18n info from URL and add to i18n object
-	$i18nJSON = json_decode( file_get_contents( $config['catalog-info'] ), true );
+	$i18nJSON = json_decode( file_get_contents( $config['catalog-i18n'] ), true );
 	foreach ( array_keys( $i18n ) as $langCode ) {
 		if ( array_key_exists( "$langCode-title", $i18nJSON ) ) {
 			$i18n[$langCode]['catalog-title'] = $i18nJSON["$langCode-title"];

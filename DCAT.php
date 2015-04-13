@@ -18,7 +18,7 @@ function makeDataBlob(){
     // identify existant i18n files
     $langs = array ();
     foreach ( scandir('i18n') as $key  => $filename ) {
-        if ( substr($filename, -strlen('.json')) === '.json' && $filename != 'qqq.json.') {
+        if ( substr($filename, -strlen('.json')) === '.json' && $filename != 'qqq.json') {
             $langs[substr($filename, 0, -strlen('.json'))] = "i18n/".$filename;
         }
     }

@@ -9,7 +9,7 @@
 
 /**
  * Construct a data blob as an easy way of passing data around.
- * @return array data blob
+ * @return array: A data blob
  */
 function makeDataBlob(){
 	// Open config file and languages
@@ -65,9 +65,10 @@ function makeDataBlob(){
 /**
  * Add additional data to a distribution entry when dealing with a dump.
  * Complement to writeDistribution()
- * @param XmlWriter $xml: XML stream to write to
- * @param array $data: data-blob of i18n and config variables
- * @param string $dumpDate: the date of the dumpfile, null for live data
+ *
+ * @param XmlWriter $xml XML stream to write to
+ * @param array $data data-blob of i18n and config variables
+ * @param string $dumpDate the date of the dumpfile, null for live data
  */
 function dumpDistributionExtras(XMLWriter $xml, $data, $dumpDate){
 	$url = str_replace( '$1', "$dumpDate.json.gz", $data['config']['dump-info']['accessURL'] );
@@ -92,11 +93,12 @@ function dumpDistributionExtras(XMLWriter $xml, $data, $dumpDate){
  * Construct distribution entry for each format in which a distribution
  * is available. The DCAT-specification requires each format to be a
  * separate distribution.
- * @param XmlWriter $xml: XML stream to write to
- * @param array $data: data-blob of i18n and config variables
- * @param string $distribId: id for the distribution
- * @param string $prefix: prefix for corresponding entry in config file
- * @param string $dumpDate: the date of the dumpfile, null for live data
+ *
+ * @param XmlWriter $xml XML stream to write to
+ * @param array $data data-blob of i18n and config variables
+ * @param string $distribId id for the distribution
+ * @param string $prefix prefix for corresponding entry in config file
+ * @param string $dumpDate the date of the dumpfile, null for live data
  */
 function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate){
 	$ids = array ();
@@ -145,13 +147,14 @@ function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate
 
 /**
  * Construct a dataset entry
- * @param XmlWriter $xml: XML stream to write to
- * @param array $data: data-blob of i18n and config variables
- * @param string $dumpDate: the date of the dumpfile, null for live data
- * @param string $datasetId: the id of the dataset
- * @param string $publisher: the nodeId of the publisher
- * @param string $contactPoint: the nodeId of the contactPoint
- * @param array $distribution: array of the distribution identifiers
+ *
+ * @param XmlWriter $xml XML stream to write to
+ * @param array $data data-blob of i18n and config variables
+ * @param string $dumpDate the date of the dumpfile, null for live data
+ * @param string $datasetId the id of the dataset
+ * @param string $publisher the nodeId of the publisher
+ * @param string $contactPoint the nodeId of the contactPoint
+ * @param array $distribution array of the distribution identifiers
  */
 function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId, $publisher, $contactPoint, $distribution){
 	$type = 'dump';
@@ -230,9 +233,10 @@ function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId, $publisher, 
 
 /**
  * Construct the publisher for the catalog and datasets with a given nodeId
- * @param XmlWriter $xml: XML stream to write to
- * @param array $data: data-blob of i18n and config variables
- * @param string $publisher: the nodeId of the publisher
+ *
+ * @param XmlWriter $xml XML stream to write to
+ * @param array $data data-blob of i18n and config variables
+ * @param string $publisher the nodeId of the publisher
  */
 function writePublisher(XMLWriter $xml, $data, $publisher){
 	$xml->startElementNS( 'rdf', 'Description', null );
@@ -259,9 +263,10 @@ function writePublisher(XMLWriter $xml, $data, $publisher){
 
 /**
  * Construct a contactPoint for the datasets with a given nodeId
- * @param XmlWriter $xml: XML stream to write to
- * @param array $data: data-blob of i18n and config variables
- * @param string $contactPoint: the nodeId of the contactPoint
+ *
+ * @param XmlWriter $xml XML stream to write to
+ * @param array $data data-blob of i18n and config variables
+ * @param string $contactPoint the nodeId of the contactPoint
  */
 function writeContactPoint(XMLWriter $xml, $data, $contactPoint){
 	$xml->startElementNS( 'rdf', 'Description', null );
@@ -282,10 +287,11 @@ function writeContactPoint(XMLWriter $xml, $data, $contactPoint){
 
 /**
  * Construct the catalog entry
- * @param XmlWriter $xml: XML stream to write to
- * @param array $data: data-blob of i18n and config variables
- * @param string $publisher: the nodeId of the publisher
- * @param array $dataset: array of the dataset identifiers
+ *
+ * @param XmlWriter $xml XML stream to write to
+ * @param array $data data-blob of i18n and config variables
+ * @param string $publisher the nodeId of the publisher
+ * @param array $dataset array of the dataset identifiers
  */
 function writeCatalog(XMLWriter $xml, $data, $publisher, $dataset){
 	$xml->startElementNS( 'rdf', 'Description', null );
@@ -343,8 +349,9 @@ function writeCatalog(XMLWriter $xml, $data, $publisher, $dataset){
 
 /**
  * Construct the whole DCAT-AP document given an array of dump info
- * @param array $data: data-blob of i18n and config variables
- * @return string xmldata
+ *
+ * @param array $data data-blob of i18n and config variables
+ * @return string: xmldata
  */
 function outputXml($data){
 	// Setting XML header
@@ -404,8 +411,9 @@ function outputXml($data){
 
 /**
  * Given a dump directory produce array with data needed by outputXml()
- * @param string $dirname: directory name
- * @return array of dumpdata, or empty array
+ *
+ * @param string $dirname directory name
+ * @return array: of dumpdata, or empty array
  */
 function scanDump($dirname){
 	$teststring = '.json.gz';
@@ -427,7 +435,8 @@ function scanDump($dirname){
 /**
  * Scan dump directory for dump files (if any) and
  * create dcatap.rdf in the same directory
- * @param string $directory: directory name, overrides config setting if provided
+ *
+ * @param string $directory directory name, overrides config setting if provided
  */
 function run($directory=null){
 	// Load config variables and i18n a data blob

@@ -5,6 +5,7 @@ A project aimed at generating a [DCAT-AP](https://joinup.ec.europa.eu/system/fil
 in general and [Wikidata](http://wikidata.org) in particular.
 
 Takes into account access through:
+
 * Content negotiation (various formats)
 * MediaWiki api (various formats)
 * JSON dumps (assumes that these are gziped)

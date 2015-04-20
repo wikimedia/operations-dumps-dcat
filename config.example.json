@@ -16,9 +16,9 @@
         "publisherType": "NonProfitOrganisation"
     },
     "contactPoint": {
-        "vcardType" : "Organization",
         "name": "Wikidata information team",
-        "email": "info@wikidata.org"
+        "email": "info@wikidata.org",
+        "vcardType" : "Organization"
     },
     "ld-info": {
         "accessURL": "http://www.wikidata.org/entity/",

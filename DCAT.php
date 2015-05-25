@@ -70,9 +70,12 @@ function makeDataBlob(){
  * @param array $data data-blob of i18n and config variables
  * @param string $dumpDate the date of the dumpfile, null for live data
  */
-function dumpDistributionExtras(XMLWriter $xml, $data, $dumpDate){
-	$url = str_replace( '$1', "$dumpDate.json.gz",
-		$data['config']['dump-info']['accessURL'] );
+function dumpDistributionExtras(XMLWriter $xml, $data, $dumpDate, $format){
+	$url = str_replace(
+		'$1',
+		$dumpDate . '/' . $data['dumps'][$dumpDate][$format]['filename'],
+		$data['config']['dump-info']['accessURL']
+	);
 
 	$xml->startElementNS( 'dcat', 'accessURL', null );
 	$xml->writeAttributeNS( 'rdf', 'resource', null, $url );
@@ -83,12 +86,12 @@ function dumpDistributionExtras(XMLWriter $xml, $data, $dumpDate){
 	$xml->endElement();
 
 	$xml->writeElementNS( 'dcterms', 'issued', null,
-		$data['dumps'][$dumpDate]['timestamp'] );
+		$data['dumps'][$dumpDate][$format]['timestamp'] );
 
 	$xml->startElementNS( 'dcat', 'byteSize', null );
 	$xml->writeAttributeNS( 'rdf', 'datatype', null,
 		'http://www.w3.org/2001/XMLSchema#decimal' );
-	$xml->text( $data['dumps'][$dumpDate]['byteSize'] );
+	$xml->text( $data['dumps'][$dumpDate][$format]['byteSize'] );
 	$xml->endElement();
 }
 
@@ -130,7 +133,7 @@ function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate
 			$xml->endElement();
 		}
 		else {
-			dumpDistributionExtras( $xml, $data, $dumpDate );
+			dumpDistributionExtras( $xml, $data, $dumpDate, $format );
 		}
 
 		$xml->writeElementNS( 'dcterms', 'format', null, $mediatype );
@@ -140,7 +143,9 @@ function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate
 			if ( array_key_exists( "distribution-$prefix-description", $langData ) ) {
 				$xml->startElementNS( 'dcterms', 'description', null );
 				$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
-				$xml->text( $langData["distribution-$prefix-description"] );
+				$xml->text(
+					str_replace( '$1', $format, $langData["distribution-$prefix-description"] )
+				);  //TODO add format
 				$xml->endElement();
 			}
 		}
@@ -457,17 +462,31 @@ function outputXml($data){
  * @param string $dirname directory name
  * @return array: of dumpdata, or empty array
  */
-function scanDump($dirname){
-	$teststring = '.json.gz';
+function scanDump($dirname, $data){
+	$teststrings = array();
+	foreach ( $data['config']['dump-info']['mediatype'] as $fileEnding => $mediatype ) {
+		$teststrings[$fileEnding] = 'all.' . $fileEnding . '.gz';
+	}
+
 	$dumps = array ();
 
-	foreach ( scandir( $dirname ) as $key  => $filename ) {
-		if ( substr( $filename, -strlen( $teststring ) ) === $teststring ) {
-			$info = stat( "$dirname/$filename" );
-			$dumps[substr( $filename, 0, -strlen( $teststring ) )] = array (
-				'timestamp' => gmdate( 'Y-m-d\TH:i:s', $info['mtime'] ),
-				'byteSize' => $info['size']
-			);
+	foreach ( scandir( $dirname ) as $dirKey  => $subdir ) {
+		if ( substr( $subdir, 0, 1 ) != '.' && is_dir( $dirname.'/'.$subdir ) ) {
+			// each subdir refers to a timestamp
+			$dumps[$subdir] = array();
+			foreach ( scandir( $dirname.'/'.$subdir ) as $key  => $filename ) {
+				//match each file against an expected teststring
+				foreach ( $teststrings as $fileEnding  => $teststring ) {
+					if ( substr( $filename, -strlen( $teststring ) ) === $teststring ) {
+						$info = stat( "$dirname/$subdir/$filename" );
+						$dumps[$subdir][$fileEnding] = array(
+							'timestamp' => gmdate( 'Y-m-d', $info['mtime'] ),
+							'byteSize' => $info['size'],
+							'filename' => $filename
+						);
+					}
+				}
+			}
 		}
 	}
 
@@ -496,7 +515,7 @@ function run($directory=null){
 	}
 
 	// add dump data to data blob
-	$data['dumps'] = scanDump( $directory );
+	$data['dumps'] = scanDump( $directory, $data );
 
 	// create xml string from data blob
 	$xml = outputXml( $data );

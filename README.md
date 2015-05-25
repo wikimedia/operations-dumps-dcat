@@ -43,8 +43,8 @@ Current result can be found at [lokal-profil / dcat-wikidata.rdf](https://gist.g
 
 Below follows a key by key explanation of the config file.
 
-*   `directory`: Relative path to the directory containing the dumps
-    (if any) and for the final dcat file.
+*   `directory`: Relative path to the directory containing the dump
+    subcategories (if any) and for the final dcat file.
 *   `api-enabled`: (`Boolean`) Is API access activated for the MediaWiki
     installation?
 *   `dumps-enabled`: (`Boolean`) Is JSON dump generation activated for the
@@ -82,7 +82,7 @@ Below follows a key by key explanation of the config file.
     *   `accessURL`: URL to the content negotiation endpoint of the
         WikiBase installation, e.g. *http://www.example.org/entity/*
     *   `mediatype`: (`object`) List of [IANA media types](http://www.iana.org/assignments/media-types/)
-        available through content negotiation in the format *name:media-type*
+        available through content negotiation in the format *file-ending:media-type*
     *   `license`: License of the data in the distribution, e.g.
         *http://creativecommons.org/publicdomain/zero/1.0/*
 *   `api-info`:
@@ -96,5 +96,5 @@ Below follows a key by key explanation of the config file.
         reside (`$1` is replaced on the fly by the actual filename),
         e.g. *http://example.org/dumps/$1*
     *   `mediatype`: (`object`) List of media types. In practice this is
-        always `{"json": "application/json"}`
+        always `{"json": "application/json"}` ... for now
     *   `license`: See ld-info:license above

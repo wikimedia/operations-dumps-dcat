@@ -26,7 +26,7 @@
             "json": "application/json",
             "n3": "application/n-triples",
             "rdf": "application/rdf+xml",
-            "turtle": "text/turtle",
+            "ttl": "text/turtle",
             "xml": "application/xml",
             "html": "text/html"
         },
@@ -44,7 +44,8 @@
     "dump-info": {
         "accessURL": "https://dumps.wikimedia.org/other/wikidata/$1",
         "mediatype": {
-            "json": "application/json"
+            "json": "application/json",
+            "ttl": "text/turtle"
         },
         "license": "http://creativecommons.org/publicdomain/zero/1.0/"
     }

@@ -11,7 +11,7 @@
  * Construct a data blob as an easy way of passing data around.
  * @return array: A data blob
  */
-function makeDataBlob(){
+function makeDataBlob() {
 	// Open config file and languages
 	$config = json_decode( file_get_contents( 'config.json' ), true );
 
@@ -70,7 +70,7 @@ function makeDataBlob(){
  * @param array $data data-blob of i18n and config variables
  * @param string $dumpDate the date of the dumpfile, null for live data
  */
-function dumpDistributionExtras(XMLWriter $xml, $data, $dumpDate, $format){
+function dumpDistributionExtras( XMLWriter $xml, $data, $dumpDate, $format ) {
 	$url = str_replace(
 		'$1',
 		$dumpDate . '/' . $data['dumps'][$dumpDate][$format]['filename'],
@@ -106,7 +106,7 @@ function dumpDistributionExtras(XMLWriter $xml, $data, $dumpDate, $format){
  * @param string $prefix prefix for corresponding entry in config file
  * @param string $dumpDate the date of the dumpfile, null for live data
  */
-function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate){
+function writeDistribution( XMLWriter $xml, $data, $distribId, $prefix, $dumpDate ) {
 	$ids = array ();
 
 	foreach ( $data['config']["$prefix-info"]['mediatype'] as $format => $mediatype ) {
@@ -145,7 +145,7 @@ function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate
 				$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
 				$xml->text(
 					str_replace( '$1', $format, $langData["distribution-$prefix-description"] )
-				);  //TODO add format
+				);  // TODO add format
 				$xml->endElement();
 			}
 		}
@@ -167,8 +167,8 @@ function writeDistribution(XMLWriter $xml, $data, $distribId, $prefix, $dumpDate
  * @param string $contactPoint the nodeId of the contactPoint
  * @param array $distribution array of the distribution identifiers
  */
-function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId,
-	$publisher, $contactPoint, $distribution){
+function writeDataset( XMLWriter $xml, $data, $dumpDate, $datasetId,
+	$publisher, $contactPoint, $distribution ) {
 
 	$type = 'dump';
 	if ( is_null( $dumpDate ) ) {
@@ -254,7 +254,7 @@ function writeDataset(XMLWriter $xml, $data, $dumpDate, $datasetId,
  * @param array $data data-blob of i18n and config variables
  * @param string $publisher the nodeId of the publisher
  */
-function writePublisher(XMLWriter $xml, $data, $publisher){
+function writePublisher( XMLWriter $xml, $data, $publisher ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
 	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $publisher );
 
@@ -290,7 +290,7 @@ function writePublisher(XMLWriter $xml, $data, $publisher){
  * @param array $data data-blob of i18n and config variables
  * @param string $contactPoint the nodeId of the contactPoint
  */
-function writeContactPoint(XMLWriter $xml, $data, $contactPoint){
+function writeContactPoint( XMLWriter $xml, $data, $contactPoint ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
 	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $contactPoint );
 
@@ -319,7 +319,7 @@ function writeContactPoint(XMLWriter $xml, $data, $contactPoint){
  * @param string $publisher the nodeId of the publisher
  * @param array $dataset array of the dataset identifiers
  */
-function writeCatalog(XMLWriter $xml, $data, $publisher, $dataset){
+function writeCatalog( XMLWriter $xml, $data, $publisher, $dataset ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
 	$xml->writeAttributeNS( 'rdf', 'about', null,
 		$data['config']['uri'] . '#catalog' );
@@ -386,9 +386,9 @@ function writeCatalog(XMLWriter $xml, $data, $publisher, $dataset){
  * @param array $data data-blob of i18n and config variables
  * @return string: xmldata
  */
-function outputXml($data){
+function outputXml( $data ) {
 	// Setting XML header
-	@header ('content-type: text/xml charset=UTF-8');
+	@header ( 'content-type: text/xml charset=UTF-8' );
 
 	// Initializing the XML Object
 	$xml = new XmlWriter();
@@ -462,7 +462,7 @@ function outputXml($data){
  * @param string $dirname directory name
  * @return array: of dumpdata, or empty array
  */
-function scanDump($dirname, $data){
+function scanDump( $dirname, $data ) {
 	$teststrings = array();
 	foreach ( $data['config']['dump-info']['mediatype'] as $fileEnding => $mediatype ) {
 		$teststrings[$fileEnding] = 'all.' . $fileEnding . '.gz';
@@ -471,11 +471,12 @@ function scanDump($dirname, $data){
 	$dumps = array ();
 
 	foreach ( scandir( $dirname ) as $dirKey  => $subdir ) {
-		if ( substr( $subdir, 0, 1 ) != '.' && is_dir( $dirname.'/'.$subdir ) ) {
+		// get rid of files and non-relevant sub-directories
+		if ( substr( $subdir, 0, 1 ) != '.' && is_dir( $dirname . '/' . $subdir ) ) {
 			// each subdir refers to a timestamp
 			$dumps[$subdir] = array();
-			foreach ( scandir( $dirname.'/'.$subdir ) as $key  => $filename ) {
-				//match each file against an expected teststring
+			foreach ( scandir( $dirname . '/' . $subdir ) as $key  => $filename ) {
+				// match each file against an expected teststring
 				foreach ( $teststrings as $fileEnding  => $teststring ) {
 					if ( substr( $filename, -strlen( $teststring ) ) === $teststring ) {
 						$info = stat( "$dirname/$subdir/$filename" );
@@ -499,7 +500,7 @@ function scanDump($dirname, $data){
  *
  * @param string $directory directory name, overrides config setting if provided
  */
-function run($directory=null){
+function run( $directory = null ) {
 	// Load config variables and i18n a data blob
 	$data = makeDataBlob();
 

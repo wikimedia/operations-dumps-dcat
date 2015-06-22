@@ -9,7 +9,7 @@ Takes into account access through:
 
 *   Content negotiation (various formats)
 *   MediaWiki api (various formats)
-*   JSON dumps (assumes that these are gziped)
+*   Entity dumps e.g. json, ttl (assumes that these are gziped)
 
 Current result can be found at [lokal-profil / dcat-wikidata.rdf](https://gist.github.com/lokal-profil/8086dc6bf2398d84a311)
 

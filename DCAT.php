@@ -145,7 +145,7 @@ function writeDistribution( XMLWriter $xml, $data, $distribId, $prefix, $dumpDat
 				$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
 				$xml->text(
 					str_replace( '$1', $format, $langData["distribution-$prefix-description"] )
-				);  // TODO add format
+				);
 				$xml->endElement();
 			}
 		}

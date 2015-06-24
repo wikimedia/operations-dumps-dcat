@@ -22,11 +22,18 @@ Current result can be found at [lokal-profil / dcat-wikidata.rdf](https://gist.g
 2.  Copy `catalog.example.json` to a suitable place (e.g. on-wiki) and
     update the translations to fit your wikibase installation. Set this
     value as `catalog-i18n` in the config file.
-3.  Create the dcatap.rdf file by running `php -r "require 'DCAT.php'; run('<PATH>');"`
-    where `<PATH>` is the relative path to the directory containing the
-    dumps (if any) and where the dcatap.rdf file should be created.
-    `<PATH>` can be left out if already supplied through the `directory`
-    parameter in the config file.
+3.  Create the dcatap.rdf file by running `php DCAT.php` or
+    `php DCAT.php --config="<path_1>" --dumpDir="<path_2>" --outputDir="<path_3>"`
+    where each of the options is optional and can be left out.
+    The options are:
+    1.  `--config` is the relative path to the json file containing the
+        configurations, defaults to `./config.json`
+    2.  `--dumpDir` is the relative path to the directory containing the
+        dumps (if any), defaults to the `directory` parameter in the
+        config file
+    3.  `--outputDir` is the relative path to the directory where the
+        `dcatap.rdf` file should be created, defaults to the `directory`
+        parameter in the config file
 
 
 ## Translations

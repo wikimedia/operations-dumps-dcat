@@ -8,15 +8,73 @@
  */
 
 /**
+ * Validate that config is json and contains all necessary keys
+ * @param array: config
+ */
+function validateConfig( $config ) {
+	if ( !isset( $config ) ) {
+		exit( "Could not read the config file. Are you sure it is valid json?" );
+	}
+	// Later tests depend on these existing and being defined
+	$topBool = array( "api-enabled", "dumps-enabled" );
+	foreach  ( $topBool as $val ) {
+		if ( !array_key_exists( $val, $config ) ) {
+			exit( "$val is missing from the config file" );
+		}
+		elseif ( !is_bool( $config[$val] ) ) {
+			exit( "$val in the config file must be a boolean" );
+		}
+	}
+
+	// Always required
+	$top = array(
+		"directory", "uri", "themes", "keywords", "publisher",
+		"contactPoint", "ld-info", "catalog-license", "catalog-homepage",
+		"catalog-i18n", "catalog-issued"
+	);
+	$sub = array(
+		"publisher" => array( "publisherType", "homepage", "name", "email" ),
+		"contactPoint" => array( "vcardType", "name", "email" ),
+		"ld-info" => array( "accessURL", "mediatype", "license" )
+	);
+
+	// Dependent on topBool
+	if ( $config['api-enabled'] ) {
+		array_push( $top, "api-info" );
+		$sub["api-info"] = array( "accessURL", "mediatype", "license" );
+	}
+	if ( $config['dumps-enabled'] ) {
+		array_push( $top, "dump-info" );
+		$sub["dump-info"] = array( "accessURL", "mediatype", "license" );
+	}
+
+	// Test
+	foreach  ( $top as $val ) {
+		if ( !array_key_exists( $val, $config ) ) {
+			exit( "$val is missing from the config file" );
+		}
+	}
+	foreach  ( $sub as $key => $subArray ) {
+		foreach  ( $subArray as $val ) {
+			if ( !array_key_exists( $val, $config[$key] ) ) {
+				exit( $key . "[" . $val . "] is missing from the config file" );
+			}
+		}
+	}
+}
+
+/**
  * Construct a data blob as an easy way of passing data around.
+ * @param string: path to config file
  * @return array: A data blob
  */
-function makeDataBlob() {
+function makeDataBlob( $config ) {
 	// Open config file and languages
-	$config = json_decode( file_get_contents( 'config.json' ), true );
+	$config = json_decode( file_get_contents( $config ), true );
+	validateConfig( $config );
 
-	// identify existant i18n files
-	$langs = array ();
+	// identify existing i18n files
+	$langs = array();
 	foreach ( scandir( 'i18n' ) as $key  => $filename ) {
 		if ( substr( $filename, -strlen( '.json' ) ) === '.json' && $filename !== 'qqq.json' ) {
 			$langs[substr( $filename, 0, -strlen( '.json' ) )] = "i18n/$filename";
@@ -24,13 +82,20 @@ function makeDataBlob() {
 	}
 
 	// load i18n files into i18n object
-	$i18n = array ();
+	$i18n = array();
 	foreach ( $langs as $langCode => $filename ) {
 		$i18n[$langCode] = json_decode( file_get_contents( $filename ), true );
 	}
 
 	// load catalog i18n info from URL and add to i18n object
 	$i18nJSON = json_decode( file_get_contents( $config['catalog-i18n'] ), true );
+	if ( !isset( $i18nJSON ) ) {
+		exit(
+			"Could not read catalog-i18n. Are you sure " .
+			$config['catalog-i18n'] .
+			" exists and is valid json?"
+		);
+	}
 	foreach ( array_keys( $i18n ) as $langCode ) {
 		if ( array_key_exists( "$langCode-title", $i18nJSON ) ) {
 			$i18n[$langCode]['catalog-title'] = $i18nJSON["$langCode-title"];
@@ -42,7 +107,7 @@ function makeDataBlob() {
 
 	// hardcoded ids (for now at least)
 	// issue #2
-	$ids = array (
+	$ids = array(
 		'publisher' => '_n42',
 		'contactPoint' => '_n43',
 		'liveDataset' => 'liveData',
@@ -53,7 +118,7 @@ function makeDataBlob() {
 	);
 
 	// stick loaded data into blob
-	$data = array (
+	$data = array(
 		'config' => $config,
 		'dumps' => null,
 		'i18n' => $i18n,
@@ -107,7 +172,7 @@ function dumpDistributionExtras( XMLWriter $xml, $data, $dumpDate, $format ) {
  * @param string $dumpDate the date of the dumpfile, null for live data
  */
 function writeDistribution( XMLWriter $xml, $data, $distribId, $prefix, $dumpDate ) {
-	$ids = array ();
+	$ids = array();
 
 	foreach ( $data['config']["$prefix-info"]['mediatype'] as $format => $mediatype ) {
 		$id = $data['config']['uri'] . '#' . $distribId . $dumpDate . $format;
@@ -340,7 +405,7 @@ function writeCatalog( XMLWriter $xml, $data, $publisher, $dataset ) {
 	$xml->endElement();
 
 	$xml->writeElementNS( 'foaf', 'homepage', null,
-		'https://www.wikidata.org' );
+		$data['config']['catalog-homepage'] );
 	$xml->writeElementNS( 'dcterms', 'modified', null, date( 'Y-m-d' ) );
 	$xml->writeElementNS( 'dcterms', 'issued', null,
 		$data['config']['catalog-issued'] );
@@ -416,7 +481,7 @@ function outputXml( $data ) {
 	writePublisher( $xml, $data, $data['ids']['publisher'] );
 	writeContactPoint( $xml, $data, $data['ids']['contactPoint'] );
 
-	$dataset = array ();
+	$dataset = array();
 
 	// Live dataset and distributions
 	$liveDistribs = writeDistribution( $xml, $data,
@@ -468,25 +533,29 @@ function scanDump( $dirname, $data ) {
 		$teststrings[$fileEnding] = 'all.' . $fileEnding . '.gz';
 	}
 
-	$dumps = array ();
+	$dumps = array();
 
 	foreach ( scandir( $dirname ) as $dirKey  => $subdir ) {
 		// get rid of files and non-relevant sub-directories
 		if ( substr( $subdir, 0, 1 ) != '.' && is_dir( $dirname . '/' . $subdir ) ) {
 			// each subdir refers to a timestamp
-			$dumps[$subdir] = array();
+			$subDump = array();
 			foreach ( scandir( $dirname . '/' . $subdir ) as $key  => $filename ) {
 				// match each file against an expected teststring
 				foreach ( $teststrings as $fileEnding  => $teststring ) {
 					if ( substr( $filename, -strlen( $teststring ) ) === $teststring ) {
 						$info = stat( "$dirname/$subdir/$filename" );
-						$dumps[$subdir][$fileEnding] = array(
+						$subDump[$fileEnding] = array(
 							'timestamp' => gmdate( 'Y-m-d', $info['mtime'] ),
 							'byteSize' => $info['size'],
 							'filename' => $filename
 						);
 					}
 				}
+			}
+			// if files found then add to dumps
+			if ( count( $subDump ) > 0 ) {
+				$dumps[$subdir] = $subDump;
 			}
 		}
 	}
@@ -498,29 +567,48 @@ function scanDump( $dirname, $data ) {
  * Scan dump directory for dump files (if any) and
  * create dcatap.rdf in the same directory
  *
- * @param string $directory directory name, overrides config setting if provided
+ * @param array command line options to override defaults
  */
-function run( $directory = null ) {
+function run( $options ) {
 	// Load config variables and i18n a data blob
-	$data = makeDataBlob();
-
-	// Load directory from config, unless overridden
-	if ( is_null( $directory ) ) {
-		$directory = $data['config']['directory'];
+	if ( !isset( $options['config'] ) ) {
+		$options['config'] = 'config.json';
 	}
+	if ( !is_file( $options['config'] ) ) {
+		exit( $options['config'] . " does not seem to exist" );
+	}
+	$data = makeDataBlob( $options['config'] );
 
-	// test if dir exists
-	if ( !is_dir( $directory ) ) {
-		echo "$directory is not a valid directory";
-		return;
+	// Load directories from config/options and test for existence
+	if ( !isset( $options['dumpDir'] ) ) {
+		$options['dumpDir'] = $data['config']['directory'];
+	}
+	if ( !is_dir( $options['dumpDir'] ) ) {
+		exit( $options['dumpDir'] . " is not a valid directory" );
+	}
+	if ( !isset( $options['outputDir'] ) ) {
+		$options['outputDir'] = $data['config']['directory'];
+	}
+	if ( !is_dir( $options['outputDir'] ) ) {
+		exit( $options['outputDir'] . " is not a valid directory" );
 	}
 
 	// add dump data to data blob
-	$data['dumps'] = scanDump( $directory, $data );
+	$data['dumps'] = scanDump( $options['dumpDir'], $data );
 
 	// create xml string from data blob
 	$xml = outputXml( $data );
 
-	file_put_contents( "$directory/dcatap.rdf", $xml );
+	file_put_contents( $options['outputDir'] . "/dcatap.rdf", $xml );
 }
+
+// run from command-line with options
+// Load options
+$longopts  = array(
+	"config::",     // Path to the config.json, default: config.json
+	"dumpDir::",    // Path to the directory containing entity dumps, default: set in config
+	"outputDir::"   // Path where dcat.rdf should be outputted, default: same as dumpDir
+);
+$options = getopt( '', $longopts );
+run( $options );
 ?>

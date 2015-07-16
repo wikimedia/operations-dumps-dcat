@@ -9,20 +9,17 @@
 
 /**
  * Validate that config is json and contains all necessary keys
- * @param array: config
+ *
+ * @param array $config json decoded config file
  */
-function validateConfig( $config ) {
-	if ( !isset( $config ) ) {
-		exit( "Could not read the config file. Are you sure it is valid json?" );
-	}
+function validateConfig( array $config ) {
 	// Later tests depend on these existing and being defined
 	$topBool = array( "api-enabled", "dumps-enabled" );
-	foreach  ( $topBool as $val ) {
+	foreach ( $topBool as $val ) {
 		if ( !array_key_exists( $val, $config ) ) {
-			exit( "$val is missing from the config file" );
-		}
-		elseif ( !is_bool( $config[$val] ) ) {
-			exit( "$val in the config file must be a boolean" );
+			throw new Exception( "$val is missing from the config file" );
+		} elseif ( !is_bool( $config[$val] ) ) {
+			throw new Exception( "$val in the config file must be a boolean" );
 		}
 	}
 
@@ -49,39 +46,31 @@ function validateConfig( $config ) {
 	}
 
 	// Test
-	foreach  ( $top as $val ) {
+	foreach ( $top as $val ) {
 		if ( !array_key_exists( $val, $config ) ) {
-			exit( "$val is missing from the config file" );
+			throw new Exception( "$val is missing from the config file" );
 		}
 	}
-	foreach  ( $sub as $key => $subArray ) {
-		foreach  ( $subArray as $val ) {
+	foreach ( $sub as $key => $subArray ) {
+		foreach ( $subArray as $val ) {
 			if ( !array_key_exists( $val, $config[$key] ) ) {
-				exit( $key . "[" . $val . "] is missing from the config file" );
+				throw new Exception(
+					$key . "[" . $val . "] is missing from the config file"
+				);
 			}
 		}
 	}
 }
 
 /**
- * Construct a data blob as an easy way of passing data around.
- * @param string: path to config file
- * @return array: A data blob
+ * Load i18n files, local and remote, into an array
+ *
+ * @param array $langs array of langcode => filename
+ * @param array $config json decoded config file
+ * @return array: An i18n blob
  */
-function makeDataBlob( $config ) {
-	// Open config file and languages
-	$config = json_decode( file_get_contents( $config ), true );
-	validateConfig( $config );
-
-	// identify existing i18n files
-	$langs = array();
-	foreach ( scandir( 'i18n' ) as $key  => $filename ) {
-		if ( substr( $filename, -strlen( '.json' ) ) === '.json' && $filename !== 'qqq.json' ) {
-			$langs[substr( $filename, 0, -strlen( '.json' ) )] = "i18n/$filename";
-		}
-	}
-
-	// load i18n files into i18n object
+function makeI18nBlob( array $langs, array $config ) {
+	// load i18n files into i18n array
 	$i18n = array();
 	foreach ( $langs as $langCode => $filename ) {
 		$i18n[$langCode] = json_decode( file_get_contents( $filename ), true );
@@ -90,7 +79,7 @@ function makeDataBlob( $config ) {
 	// load catalog i18n info from URL and add to i18n object
 	$i18nJSON = json_decode( file_get_contents( $config['catalog-i18n'] ), true );
 	if ( !isset( $i18nJSON ) ) {
-		exit(
+		throw new Exception(
 			"Could not read catalog-i18n. Are you sure " .
 			$config['catalog-i18n'] .
 			" exists and is valid json?"
@@ -105,8 +94,32 @@ function makeDataBlob( $config ) {
 		}
 	}
 
+	return $i18n;
+}
+
+/**
+ * Construct a data blob as an easy way of passing data around
+ *
+ * @param string $config path to config file
+ * @return array: A data blob
+ */
+function makeDataBlob( $config ) {
+	// Open config file and languages
+	$config = json_decode( file_get_contents( $config ), true );
+	validateConfig( $config );
+
+	// identify existing i18n files and load into array
+	$langs = array();
+	foreach ( glob( 'i18n/*.json' ) as $filename ) {
+		if ( $filename !== 'i18n/qqq.json' ) {
+			$langcode = substr( $filename, strlen( 'i18n/' ), -strlen( '.json' ) );
+			$langs[$langcode] = $filename;
+		}
+	}
+	$i18n = makeI18nBlob( $langs, $config );
+
 	// hardcoded ids (for now at least)
-	// issue #2
+	// https://github.com/lokal-profil/DCAT/issues/2
 	$ids = array(
 		'publisher' => '_n42',
 		'contactPoint' => '_n43',
@@ -133,9 +146,10 @@ function makeDataBlob( $config ) {
  *
  * @param XmlWriter $xml XML stream to write to
  * @param array $data data-blob of i18n and config variables
- * @param string $dumpDate the date of the dumpfile, null for live data
+ * @param string|null $dumpDate the date of the dumpfile, null for live data
+ * @param string $format the fileformat
  */
-function dumpDistributionExtras( XMLWriter $xml, $data, $dumpDate, $format ) {
+function dumpDistributionExtras( XMLWriter $xml, array $data, $dumpDate, $format ) {
 	$url = str_replace(
 		'$1',
 		$dumpDate . '/' . $data['dumps'][$dumpDate][$format]['filename'],
@@ -169,12 +183,18 @@ function dumpDistributionExtras( XMLWriter $xml, $data, $dumpDate, $format ) {
  * @param array $data data-blob of i18n and config variables
  * @param string $distribId id for the distribution
  * @param string $prefix prefix for corresponding entry in config file
- * @param string $dumpDate the date of the dumpfile, null for live data
+ * @param string|null $dumpDate the date of the dumpfile, null for live data
  */
-function writeDistribution( XMLWriter $xml, $data, $distribId, $prefix, $dumpDate ) {
+function writeDistribution( XMLWriter $xml, array $data, $distribId, $prefix, $dumpDate ) {
 	$ids = array();
 
-	foreach ( $data['config']["$prefix-info"]['mediatype'] as $format => $mediatype ) {
+	$allowedMediatypes = $data['config']["$prefix-info"]['mediatype'];
+	foreach ( $allowedMediatypes as $format => $mediatype ) {
+		// handle missing (and BETA) dump files
+		if ( !is_null( $dumpDate ) and !array_key_exists( $format, $data['dumps'][$dumpDate] ) ) {
+			continue;
+		}
+
 		$id = $data['config']['uri'] . '#' . $distribId . $dumpDate . $format;
 		array_push( $ids, $id );
 
@@ -196,8 +216,7 @@ function writeDistribution( XMLWriter $xml, $data, $distribId, $prefix, $dumpDat
 			$xml->writeAttributeNS( 'rdf', 'resource', null,
 				$data['config']["$prefix-info"]['accessURL'] );
 			$xml->endElement();
-		}
-		else {
+		} else {
 			dumpDistributionExtras( $xml, $data, $dumpDate, $format );
 		}
 
@@ -206,11 +225,14 @@ function writeDistribution( XMLWriter $xml, $data, $distribId, $prefix, $dumpDat
 		// add description in each language
 		foreach ( $data['i18n'] as $langCode => $langData ) {
 			if ( array_key_exists( "distribution-$prefix-description", $langData ) ) {
+				$formatDescription = str_replace(
+					'$1',
+					$format,
+					$langData["distribution-$prefix-description"]
+				);
 				$xml->startElementNS( 'dcterms', 'description', null );
 				$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
-				$xml->text(
-					str_replace( '$1', $format, $langData["distribution-$prefix-description"] )
-				);
+				$xml->text( $formatDescription );
 				$xml->endElement();
 			}
 		}
@@ -222,18 +244,49 @@ function writeDistribution( XMLWriter $xml, $data, $distribId, $prefix, $dumpDat
 }
 
 /**
+ * Add i18n title and description for a dataset
+ *
+ * @param XmlWriter $xml XML stream to write to
+ * @param array $data data-blob of i18n and config variables
+ * @param string|null $dumpDate the date of the dumpfile, null for live data
+ * @param string $type dump or live
+ */
+function writeDatasetI18n( XMLWriter $xml, array $data, $dumpDate, $type ) {
+	foreach ( $data['i18n'] as $langCode => $langData ) {
+		if ( array_key_exists( "dataset-$type-title", $langData ) ) {
+			$xml->startElementNS( 'dcterms', 'title', null );
+			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
+			if ( $type === 'live' ) {
+				$xml->text( $langData['dataset-live-title'] );
+			} else {
+				$xml->text(
+					str_replace( '$1', $dumpDate, $langData['dataset-dump-title'] )
+				);
+			}
+			$xml->endElement();
+		}
+		if ( array_key_exists( "dataset-$type-description", $langData ) ) {
+			$xml->startElementNS( 'dcterms', 'description', null );
+			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
+			$xml->text( $langData["dataset-$type-description"] );
+			$xml->endElement();
+		}
+	}
+}
+
+/**
  * Construct a dataset entry
  *
  * @param XmlWriter $xml XML stream to write to
  * @param array $data data-blob of i18n and config variables
- * @param string $dumpDate the date of the dumpfile, null for live data
+ * @param string|null $dumpDate the date of the dumpfile, null for live data
  * @param string $datasetId the id of the dataset
  * @param string $publisher the nodeId of the publisher
  * @param string $contactPoint the nodeId of the contactPoint
  * @param array $distribution array of the distribution identifiers
  */
-function writeDataset( XMLWriter $xml, $data, $dumpDate, $datasetId,
-	$publisher, $contactPoint, $distribution ) {
+function writeDataset( XMLWriter $xml, array $data, $dumpDate, $datasetId,
+	$publisher, $contactPoint, array $distribution ) {
 
 	$type = 'dump';
 	if ( is_null( $dumpDate ) ) {
@@ -279,27 +332,7 @@ function writeDataset( XMLWriter $xml, $data, $dumpDate, $datasetId,
 	}
 
 	// add title and description in each language
-	foreach ( $data['i18n'] as $langCode => $langData ) {
-		if ( array_key_exists( "dataset-$type-title", $langData ) ) {
-			$xml->startElementNS( 'dcterms', 'title', null );
-			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
-			if ( $type === 'live' ) {
-				$xml->text( $langData['dataset-live-title'] );
-			}
-			else {
-				$xml->text(
-					str_replace( '$1', $dumpDate, $langData['dataset-dump-title'] )
-			   );
-			}
-			$xml->endElement();
-		}
-		if ( array_key_exists( "dataset-$type-description", $langData ) ) {
-			$xml->startElementNS( 'dcterms', 'description', null );
-			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
-			$xml->text( $langData["dataset-$type-description"] );
-			$xml->endElement();
-		}
-	}
+	writeDatasetI18n( $xml, $data, $dumpDate, $type );
 
 	// add distributions
 	foreach ( $distribution as $key => $value ) {
@@ -319,7 +352,7 @@ function writeDataset( XMLWriter $xml, $data, $dumpDate, $datasetId,
  * @param array $data data-blob of i18n and config variables
  * @param string $publisher the nodeId of the publisher
  */
-function writePublisher( XMLWriter $xml, $data, $publisher ) {
+function writePublisher( XMLWriter $xml, array $data, $publisher ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
 	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $publisher );
 
@@ -355,7 +388,7 @@ function writePublisher( XMLWriter $xml, $data, $publisher ) {
  * @param array $data data-blob of i18n and config variables
  * @param string $contactPoint the nodeId of the contactPoint
  */
-function writeContactPoint( XMLWriter $xml, $data, $contactPoint ) {
+function writeContactPoint( XMLWriter $xml, array $data, $contactPoint ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
 	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $contactPoint );
 
@@ -377,6 +410,34 @@ function writeContactPoint( XMLWriter $xml, $data, $contactPoint ) {
 }
 
 /**
+ * Add language and i18n title and description for the catalog entry
+ *
+ * @param XmlWriter $xml XML stream to write to
+ * @param array $data data-blob of i18n and config variables
+ */
+function writeCatalogI18n( XMLWriter $xml, array $data ) {
+		foreach ( $data['i18n'] as $langCode => $langData ) {
+		$xml->startElementNS( 'dcterms', 'language', null );
+		$xml->writeAttributeNS( 'rdf', 'resource', null,
+			"http://id.loc.gov/vocabulary/iso639-1/$langCode" );
+		$xml->endElement();
+
+		if ( array_key_exists( 'catalog-title', $langData ) ) {
+			$xml->startElementNS( 'dcterms', 'title', null );
+			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
+			$xml->text( $langData['catalog-title'] );
+			$xml->endElement();
+		}
+		if ( array_key_exists( 'catalog-description', $langData ) ) {
+			$xml->startElementNS( 'dcterms', 'description', null );
+			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
+			$xml->text( $langData['catalog-description'] );
+			$xml->endElement();
+		}
+	}
+}
+
+/**
  * Construct the catalog entry
  *
  * @param XmlWriter $xml XML stream to write to
@@ -384,7 +445,7 @@ function writeContactPoint( XMLWriter $xml, $data, $contactPoint ) {
  * @param string $publisher the nodeId of the publisher
  * @param array $dataset array of the dataset identifiers
  */
-function writeCatalog( XMLWriter $xml, $data, $publisher, $dataset ) {
+function writeCatalog( XMLWriter $xml, array $data, $publisher, array $dataset ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
 	$xml->writeAttributeNS( 'rdf', 'about', null,
 		$data['config']['uri'] . '#catalog' );
@@ -415,25 +476,7 @@ function writeCatalog( XMLWriter $xml, $data, $publisher, $dataset ) {
 	$xml->endElement();
 
 	// add language, title and description in each language
-	foreach ( $data['i18n'] as $langCode => $langData ) {
-		$xml->startElementNS( 'dcterms', 'language', null );
-		$xml->writeAttributeNS( 'rdf', 'resource', null,
-			"http://id.loc.gov/vocabulary/iso639-1/$langCode" );
-		$xml->endElement();
-
-		if ( array_key_exists( 'catalog-title', $langData ) ) {
-			$xml->startElementNS( 'dcterms', 'title', null );
-			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
-			$xml->text( $langData['catalog-title'] );
-			$xml->endElement();
-		}
-		if ( array_key_exists( 'catalog-description', $langData ) ) {
-			$xml->startElementNS( 'dcterms', 'description', null );
-			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
-			$xml->text( $langData['catalog-description'] );
-			$xml->endElement();
-		}
-	}
+	writeCatalogI18n( $xml, $data );
 
 	// add datasets
 	foreach ( $dataset as $key => $value ) {
@@ -451,10 +494,7 @@ function writeCatalog( XMLWriter $xml, $data, $publisher, $dataset ) {
  * @param array $data data-blob of i18n and config variables
  * @return string: xmldata
  */
-function outputXml( $data ) {
-	// Setting XML header
-	@header ( 'content-type: text/xml charset=UTF-8' );
-
+function outputXml( array $data ) {
 	// Initializing the XML Object
 	$xml = new XmlWriter();
 	$xml->openMemory();
@@ -525,38 +565,39 @@ function outputXml( $data ) {
  * Given a dump directory produce array with data needed by outputXml()
  *
  * @param string $dirname directory name
+ * @param array $data data-blob of i18n and config variables
  * @return array: of dumpdata, or empty array
  */
-function scanDump( $dirname, $data ) {
-	$teststrings = array();
+function scanDump( $dirname, array $data ) {
+	$testStrings = array();
 	foreach ( $data['config']['dump-info']['mediatype'] as $fileEnding => $mediatype ) {
-		$teststrings[$fileEnding] = 'all.' . $fileEnding . '.gz';
+		$testStrings[$fileEnding] = 'all.' . $fileEnding . '.gz';
 	}
 
 	$dumps = array();
 
-	foreach ( scandir( $dirname ) as $dirKey  => $subdir ) {
-		// get rid of files and non-relevant sub-directories
-		if ( substr( $subdir, 0, 1 ) != '.' && is_dir( $dirname . '/' . $subdir ) ) {
-			// each subdir refers to a timestamp
-			$subDump = array();
-			foreach ( scandir( $dirname . '/' . $subdir ) as $key  => $filename ) {
-				// match each file against an expected teststring
-				foreach ( $teststrings as $fileEnding  => $teststring ) {
-					if ( substr( $filename, -strlen( $teststring ) ) === $teststring ) {
-						$info = stat( "$dirname/$subdir/$filename" );
-						$subDump[$fileEnding] = array(
-							'timestamp' => gmdate( 'Y-m-d', $info['mtime'] ),
-							'byteSize' => $info['size'],
-							'filename' => $filename
-						);
-					}
+	// each valid subdirectory has the form YYYYMMDD and refers to a timestamp
+	foreach ( glob( $dirname . '/[0-9]*', GLOB_ONLYDIR ) as $subdir ) {
+		// $subdir = testdirNew/20150120
+		$subDump = array();
+		foreach ( glob( $subdir . '/*.gz' ) as $filename ) {
+			// match each file against an expected testString
+			foreach ( $testStrings as $fileEnding => $testString ) {
+				if ( substr( $filename, -strlen( $testString ) ) === $testString ) {
+					$info = stat( $filename );
+					$filename = substr( $filename, strlen( $subdir . '/' ) );
+					$subDump[$fileEnding] = array(
+						'timestamp' => gmdate( 'Y-m-d', $info['mtime'] ),
+						'byteSize' => $info['size'],
+						'filename' => $filename
+					);
 				}
 			}
-			// if files found then add to dumps
-			if ( count( $subDump ) > 0 ) {
-				$dumps[$subdir] = $subDump;
-			}
+		}
+		// if files found then add to dumps
+		if ( count( $subDump ) > 0 ) {
+			$subdir = substr( $subdir, strlen( $dirname . '/' ) );
+			$dumps[$subdir] = $subDump;
 		}
 	}
 
@@ -567,15 +608,15 @@ function scanDump( $dirname, $data ) {
  * Scan dump directory for dump files (if any) and
  * create dcatap.rdf in the same directory
  *
- * @param array command line options to override defaults
+ * @param array $options command line options to override defaults
  */
-function run( $options ) {
+function run( array $options ) {
 	// Load config variables and i18n a data blob
 	if ( !isset( $options['config'] ) ) {
 		$options['config'] = 'config.json';
 	}
 	if ( !is_file( $options['config'] ) ) {
-		exit( $options['config'] . " does not seem to exist" );
+		throw new Exception( $options['config'] . " does not seem to exist" );
 	}
 	$data = makeDataBlob( $options['config'] );
 
@@ -583,14 +624,18 @@ function run( $options ) {
 	if ( !isset( $options['dumpDir'] ) ) {
 		$options['dumpDir'] = $data['config']['directory'];
 	}
-	if ( !is_dir( $options['dumpDir'] ) ) {
-		exit( $options['dumpDir'] . " is not a valid directory" );
+	if ( !is_dir( $options['dumpDir'] ) or !is_readable( $options['dumpDir'] ) ) {
+		throw new Exception(
+			$options['dumpDir'] . " is not a valid readable directory"
+		);
 	}
 	if ( !isset( $options['outputDir'] ) ) {
 		$options['outputDir'] = $data['config']['directory'];
 	}
-	if ( !is_dir( $options['outputDir'] ) ) {
-		exit( $options['outputDir'] . " is not a valid directory" );
+	if ( !is_dir( $options['outputDir'] ) or !is_writable( $options['outputDir'] ) ) {
+		throw new Exception(
+			$options['outputDir'] . " is not a valid writable directory"
+		);
 	}
 
 	// add dump data to data blob
@@ -604,11 +649,14 @@ function run( $options ) {
 
 // run from command-line with options
 // Load options
-$longopts  = array(
+$longOpts = array(
 	"config::",     // Path to the config.json, default: config.json
 	"dumpDir::",    // Path to the directory containing entity dumps, default: set in config
 	"outputDir::"   // Path where dcat.rdf should be outputted, default: same as dumpDir
 );
-$options = getopt( '', $longopts );
-run( $options );
-?>
+$options = getopt( '', $longOpts );
+try {
+	run( $options );
+} catch ( Exception $e ) {
+	die( $e->getMessage() );
+}

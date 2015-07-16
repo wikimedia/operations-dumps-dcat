@@ -2,32 +2,31 @@
     "directory": "testdir/test",
     "api-enabled": true,
     "dumps-enabled": true,
-    "uri": "http://www.wikidata.org/about",
-    "catalog-homepage": "http://wikidata.org",
+    "uri": "https://www.wikidata.org/about",
+    "catalog-homepage": "https://www.wikidata.org",
     "catalog-issued": "2012-10-30",
     "catalog-license": "http://creativecommons.org/publicdomain/zero/1.0/",
-    "catalog-i18n": "https://www.wikidata.org/w/index.php?title=User:Lokal_Profil/DCAT.json&action=raw",
+    "catalog-i18n": "https://www.wikidata.org/w/index.php?title=MediaWiki:DCAT.json&action=raw",
     "keywords": ["data store", "semantic", "knowledgebase", "Wikimedia", "user generated content", "UGC", "Wikipedia", "Wikidata"],
     "themes": ["1428", "441", "2191", "384", "7374"],
     "publisher": {
         "name": "Wikimedia Foundation",
         "homepage": "http://wikimediafoundation.org/",
-        "email": "info@wikidata.org",
+        "email": "info@wikimedia.org",
         "publisherType": "NonProfitOrganisation"
     },
     "contactPoint": {
+        "vcardType" : "Organization",
         "name": "Wikidata information team",
-        "email": "info@wikidata.org",
-        "vcardType" : "Organization"
+        "email": "info@wikidata.org"
     },
     "ld-info": {
-        "accessURL": "http://www.wikidata.org/entity/",
+        "accessURL": "https://www.wikidata.org/entity/",
         "mediatype": {
             "json": "application/json",
             "n3": "application/n-triples",
             "rdf": "application/rdf+xml",
             "ttl": "text/turtle",
-            "xml": "application/xml",
             "html": "text/html"
         },
         "license": "http://creativecommons.org/publicdomain/zero/1.0/"
@@ -36,7 +35,6 @@
         "accessURL": "https://www.wikidata.org/w/api.php",
         "mediatype": {
             "json": "application/json",
-            "php": "application/x-php",
             "xml": "application/xml"
         },
         "license": "http://creativecommons.org/publicdomain/zero/1.0/"

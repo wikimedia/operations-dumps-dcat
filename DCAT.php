@@ -71,18 +71,9 @@ function validateConfig( array $config ) {
  */
 function makeI18nBlob( array $langs, array $config ) {
 	// load i18n files into i18n array
-	$prefix = "dcatap-";
 	$i18n = array();
 	foreach ( $langs as $langCode => $filename ) {
-		$json = json_decode( file_get_contents( $filename ), true );
-		$i18n[$langCode] = array();
-		// strip prefix
-		foreach ( $json as $key => $value ) {
-			if ( is_string( $value ) ) {
-				$key = substr( $key, strlen( $prefix ) );
-				$i18n[$langCode][$key] = $value;
-			}
-		}
+		$i18n[$langCode] = json_decode( file_get_contents( $filename ), true );
 	}
 
 	// load catalog i18n info from URL and add to i18n object

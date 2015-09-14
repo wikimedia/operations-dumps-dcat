@@ -11,7 +11,8 @@ Takes into account access through:
 *   MediaWiki api (various formats)
 *   Entity dumps e.g. json, ttl (assumes that these are gziped)
 
-Current result can be found at [lokal-profil / dcatap.rdf](https://gist.github.com/lokal-profil/8086dc6bf2398d84a311)
+An example result can be found at [lokal-profil / dcatap.rdf](https://gist.github.com/lokal-profil/8086dc6bf2398d84a311).
+The live DCAT-AP description of Wikidata can be found [here](https://dumps.wikimedia.org/wikidatawiki/entities/dcatap.rdf).
 
 
 ## To use

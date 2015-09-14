@@ -38,9 +38,8 @@ Current result can be found at [lokal-profil / dcatap.rdf](https://gist.github.c
 
 ## Translations
 
-*   Translations which are generic to the tool can be submitted as pull
-    requests and should be in the same format as the files in the `i18n`
-    directory.
+*   Translations which are generic to the tool are handled by [Intuition](https://github.com/Krinkle/intuition)
+    and should be translated through [translatewiki.net](https://translatewiki.net).
 *   Translations which are specific to a project/catalog are added to
     the location specified in the `catalog-i18n` parameter of the config
     file.

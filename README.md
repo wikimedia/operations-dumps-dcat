@@ -9,7 +9,7 @@ Takes into account access through:
 
 *   Content negotiation (various formats)
 *   MediaWiki api (various formats)
-*   Entity dumps e.g. json, ttl (assumes that these are gziped)
+*   Entity dumps e.g. json, ttl (assumes that these are compressed)
 
 An example result can be found at [lokal-profil / dcatap.rdf](https://gist.github.com/lokal-profil/8086dc6bf2398d84a311).
 The live DCAT-AP description of Wikidata can be found [here](https://dumps.wikimedia.org/wikidatawiki/entities/dcatap.rdf).
@@ -102,6 +102,8 @@ Below follows a key by key explanation of the config file.
     *   `accessURL`: URL to the directory where the *.json.gz* files
         reside (`$1` is replaced on the fly by the actual filename),
         e.g. *http://example.org/dumps/$1*
-    *   `mediatype`: (`object`) List of media types. In practice this is
-        always `{"json": "application/json"}` ... for now
+    *   `mediatype`: (`object`) List of media types. e.g.
+        `{"json": "application/json"}`
+    *   `compression`: (`object`) List of compression formats, in the
+        format *name:file-ending* e.g. `{"gzip": "gz"}`
     *   `license`: See ld-info:license above

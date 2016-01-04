@@ -10,5 +10,5 @@
 	"dataset-dump-description": "The description of the entity dump for the given date.",
 	"distribution-ld-description": "The description of the Linked Data endpoint. For content negotiation see https://en.wikipedia.org/wiki/Content_negotiation",
 	"distribution-api-description": "The description of the MediaWiki API endpoint. Leave \"format\" untranslated.",
-	"distribution-dump-description": "The description of a dump file where $1 is the file format."
+	"distribution-dump-description": "The description of a dump file where $1 is the file format and $2 the compression format."
 }

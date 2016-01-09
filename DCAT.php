@@ -122,16 +122,19 @@ function makeDataBlob( $config ) {
 	}
 	$i18n = makeI18nBlob( $langs, $config );
 
-	// hardcoded ids (for now at least)
-	// https://github.com/lokal-profil/DCAT/issues/2
+	// hardcoded ids
 	$ids = array(
 		'publisher' => '_n42',
 		'contactPoint' => '_n43',
-		'liveDataset' => 'liveData',
-		'dumpDatasetPrefix' => 'dumpData',
-		'liveDistribLD' => 'liveDataLD',
-		'liveDistribAPI' => 'liveDataAPI',
-		'dumpDistribPrefix' => 'dumpDist',
+		'dataset' => array(
+			'live' => 'liveData',
+			'dump' => 'dumpData',
+		),
+		'distribution' => array(
+			'ld' => 'liveDataLD',
+			'api' => 'liveDataAPI',
+			'dump' => 'dumpDist',
+		),
 	);
 
 	// stick loaded data into blob
@@ -149,15 +152,14 @@ function makeDataBlob( $config ) {
  * Complement to writeDistribution()
  *
  * @param XmlWriter $xml XML stream to write to
- * @param array $data data-blob of i18n and config variables
- * @param string|null $dumpDate the date of the dumpfile, null for live data
- * @param string $dumpKey the key for the corresponding dump file
+ * @param array $dump the metadata on the dump being described
+ * @param string $accessURL the url prefix for the filename
  */
-function dumpDistributionExtras( XMLWriter $xml, array $data, $dumpDate, $dumpKey ) {
+function dumpDistributionExtras( XMLWriter $xml, array $dump, $accessURL ) {
 	$url = str_replace(
 		'$1',
-		$dumpDate . '/' . $data['dumps'][$dumpDate][$dumpKey]['filename'],
-		$data['config']['dump-info']['accessURL']
+		$dump['filename'],
+		$accessURL
 	);
 
 	$xml->startElementNS( 'dcat', 'accessURL', null );
@@ -171,13 +173,13 @@ function dumpDistributionExtras( XMLWriter $xml, array $data, $dumpDate, $dumpKe
 	$xml->startElementNS( 'dcterms', 'issued', null );
 	$xml->writeAttributeNS( 'rdf', 'datatype', null,
 		'http://www.w3.org/2001/XMLSchema#date' );
-	$xml->text( $data['dumps'][$dumpDate][$dumpKey]['timestamp'] );
+	$xml->text( $dump['timestamp'] );
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcat', 'byteSize', null );
 	$xml->writeAttributeNS( 'rdf', 'datatype', null,
 		'http://www.w3.org/2001/XMLSchema#decimal' );
-	$xml->text( $data['dumps'][$dumpDate][$dumpKey]['byteSize'] );
+	$xml->text( $dump['byteSize'] );
 	$xml->endElement();
 }
 
@@ -186,18 +188,17 @@ function dumpDistributionExtras( XMLWriter $xml, array $data, $dumpDate, $dumpKe
  *
  * @param XmlWriter $xml XML stream to write to
  * @param array $data data-blob of i18n and config variables
- * @param bool $isDump whether this is a dump distribution
- * @param string $prefix the type of distribution, one of ld, api or dump
- * @param string $format the file format, if dump
- * @param string $compression the compression format, if dump
+ * @param string $prefix the type of distribution, one of 'ld', 'api' or 'dump'
+ * @param string $format the file format, only used for dumps
+ * @param string $compression the compression format, only used for dumps
  */
-function writeDistributionI18n( XMLWriter $xml, array $data, $isDump,
-	$prefix, $format, $compression ) {
+function writeDistributionI18n( XMLWriter $xml, array $data, $prefix,
+	$format, $compression ) {
 
 	foreach ( $data['i18n'] as $langCode => $langData ) {
 		if ( array_key_exists( "distribution-$prefix-description", $langData ) ) {
 			$formatDescription = $langData["distribution-$prefix-description"];
-			if ( $isDump ) {
+			if ( $prefix === 'dump' ) {
 				$formatDescription = str_replace(
 					'$1',
 					$format,
@@ -224,14 +225,13 @@ function writeDistributionI18n( XMLWriter $xml, array $data, $isDump,
  *
  * @param XmlWriter $xml XML stream to write to
  * @param array $data data-blob of i18n and config variables
- * @param string $distribId id for the distribution
- * @param string $prefix prefix for corresponding entry in config file
+ * @param string $prefix the type of distribution, one of 'ld', 'api' or 'dump'
  * @param string|null $dumpDate the date of the dumpfile, null for live data
  */
-function writeDistribution( XMLWriter $xml, array $data, $distribId, $prefix, $dumpDate ) {
+function writeDistribution( XMLWriter $xml, array $data, $prefix, $dumpDate ) {
 	$ids = array();
 
-	$isDump = !is_null( $dumpDate );
+	$isDump = $prefix === 'dump';
 	$allowedMediatypes = $data['config']["$prefix-info"]['mediatype'];
 	$allowedCompressiontypes = array( '' => '' );  // dummy array for non-dumps
 	if ( $isDump ) {
@@ -247,7 +247,9 @@ function writeDistribution( XMLWriter $xml, array $data, $distribId, $prefix, $d
 				continue;
 			}
 
-			$id = $data['config']['uri'] . '#' . $distribId . $dumpDate . $distributionKey;
+			$id = $data['config']['uri'] . '#' .
+				$data['ids']['distribution'][$prefix] .
+				$dumpDate . $distributionKey;
 			array_push( $ids, $id );
 
 			$xml->startElementNS( 'rdf', 'Description', null );
@@ -269,14 +271,17 @@ function writeDistribution( XMLWriter $xml, array $data, $distribId, $prefix, $d
 					$data['config']["$prefix-info"]['accessURL'] );
 				$xml->endElement();
 			} else {
-				dumpDistributionExtras( $xml, $data, $dumpDate, $distributionKey );
+				dumpDistributionExtras( $xml,
+					$data['dumps'][$dumpDate][$distributionKey],
+					$data['config']['dump-info']['accessURL']
+				);
 			}
 
 			$xml->writeElementNS( 'dcterms', 'format', null, $mediatype );
 
 			// add description in each language
-			writeDistributionI18n( $xml, $data, $isDump, $prefix,
-				$format, $compressionName );
+			writeDistributionI18n( $xml, $data, $prefix, $format,
+				$compressionName );
 
 			$xml->endElement();
 		}
@@ -291,7 +296,7 @@ function writeDistribution( XMLWriter $xml, array $data, $distribId, $prefix, $d
  * @param XmlWriter $xml XML stream to write to
  * @param array $data data-blob of i18n and config variables
  * @param string|null $dumpDate the date of the dumpfile, null for live data
- * @param string $type dump or live
+ * @param string $type 'dump' or 'live'
  */
 function writeDatasetI18n( XMLWriter $xml, array $data, $dumpDate, $type ) {
 	foreach ( $data['i18n'] as $langCode => $langData ) {
@@ -322,20 +327,15 @@ function writeDatasetI18n( XMLWriter $xml, array $data, $dumpDate, $type ) {
  * @param XmlWriter $xml XML stream to write to
  * @param array $data data-blob of i18n and config variables
  * @param string|null $dumpDate the date of the dumpfile, null for live data
- * @param string $datasetId the id of the dataset
- * @param string $publisher the nodeId of the publisher
- * @param string $contactPoint the nodeId of the contactPoint
  * @param array $distribution array of the distribution identifiers
  */
-function writeDataset( XMLWriter $xml, array $data, $dumpDate, $datasetId,
-	$publisher, $contactPoint, array $distribution ) {
-
+function writeDataset( XMLWriter $xml, array $data, $dumpDate, array $distribution ) {
 	$type = 'dump';
 	if ( is_null( $dumpDate ) ) {
 		$type = 'live';
 	}
 
-	$id = $data['config']['uri'] . '#' . $datasetId . $dumpDate;
+	$id = $data['config']['uri'] . '#' . $data['ids']['dataset'][$type] . $dumpDate;
 
 	$xml->startElementNS( 'rdf', 'Description', null );
 	$xml->writeAttributeNS( 'rdf', 'about', null, $id );
@@ -346,14 +346,14 @@ function writeDataset( XMLWriter $xml, array $data, $dumpDate, $datasetId,
 	$xml->endElement();
 
 	$xml->startElementNS( 'adms', 'contactPoint', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $contactPoint );
+	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['contactPoint'] );
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcterms', 'publisher', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $publisher );
+	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['publisher'] );
 	$xml->endElement();
 
-	if ( $type === 'live' ) {
+	if ( is_null( $dumpDate ) ) {
 		$xml->startElementNS( 'dcterms', 'accrualPeriodicity', null );
 		$xml->writeAttributeNS( 'rdf', 'resource', null,
 			'http://purl.org/cld/freq/continuous' );
@@ -388,15 +388,14 @@ function writeDataset( XMLWriter $xml, array $data, $dumpDate, $datasetId,
 }
 
 /**
- * Construct the publisher for the catalog and datasets with a given nodeId
+ * Construct the publisher for the catalog and datasets
  *
  * @param XmlWriter $xml XML stream to write to
  * @param array $data data-blob of i18n and config variables
- * @param string $publisher the nodeId of the publisher
  */
-function writePublisher( XMLWriter $xml, array $data, $publisher ) {
+function writePublisher( XMLWriter $xml, array $data ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $publisher );
+	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['publisher'] );
 
 	$xml->startElementNS( 'rdf', 'type', null );
 	$xml->writeAttributeNS( 'rdf', 'resource', null,
@@ -424,15 +423,14 @@ function writePublisher( XMLWriter $xml, array $data, $publisher ) {
 }
 
 /**
- * Construct a contactPoint for the datasets with a given nodeId
+ * Construct a contactPoint for the datasets
  *
  * @param XmlWriter $xml XML stream to write to
  * @param array $data data-blob of i18n and config variables
- * @param string $contactPoint the nodeId of the contactPoint
  */
-function writeContactPoint( XMLWriter $xml, array $data, $contactPoint ) {
+function writeContactPoint( XMLWriter $xml, array $data ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $contactPoint );
+	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['contactPoint'] );
 
 	$xml->startElementNS( 'rdf', 'type', null );
 	$xml->writeAttributeNS( 'rdf', 'resource', null,
@@ -484,10 +482,9 @@ function writeCatalogI18n( XMLWriter $xml, array $data ) {
  *
  * @param XmlWriter $xml XML stream to write to
  * @param array $data data-blob of i18n and config variables
- * @param string $publisher the nodeId of the publisher
  * @param array $dataset array of the dataset identifiers
  */
-function writeCatalog( XMLWriter $xml, array $data, $publisher, array $dataset ) {
+function writeCatalog( XMLWriter $xml, array $data, array $dataset ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
 	$xml->writeAttributeNS( 'rdf', 'about', null,
 		$data['config']['uri'] . '#catalog' );
@@ -523,7 +520,7 @@ function writeCatalog( XMLWriter $xml, array $data, $publisher, array $dataset )
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcterms', 'publisher', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $publisher );
+	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['publisher'] );
 	$xml->endElement();
 
 	// add language, title and description in each language
@@ -569,41 +566,33 @@ function outputXml( array $data ) {
 		'http://www.w3.org/2006/vcard/ns#' );
 
 	// Calls previously declared functions to construct xml
-	writePublisher( $xml, $data, $data['ids']['publisher'] );
-	writeContactPoint( $xml, $data, $data['ids']['contactPoint'] );
+	writePublisher( $xml, $data );
+	writeContactPoint( $xml, $data );
 
 	$dataset = array();
 
 	// Live dataset and distributions
-	$liveDistribs = writeDistribution( $xml, $data,
-		$data['ids']['liveDistribLD'], 'ld', null );
+	$liveDistribs = writeDistribution( $xml, $data, 'ld', null );
 	if ( $data['config']['api-enabled'] ) {
 		$liveDistribs = array_merge( $liveDistribs,
-			writeDistribution( $xml, $data,
-				$data['ids']['liveDistribAPI'], 'api', null )
+			writeDistribution( $xml, $data, 'api', null )
 		);
 	}
 	array_push( $dataset,
-		writeDataset( $xml, $data, null, $data['ids']['liveDataset'],
-			$data['ids']['publisher'], $data['ids']['contactPoint'],
-			$liveDistribs )
+		writeDataset( $xml, $data, null, $liveDistribs )
 	);
 
 	// Dump dataset and distributions
 	if ( $data['config']['dumps-enabled'] ) {
 		foreach ( $data['dumps'] as $key => $value ) {
-			$distIds = writeDistribution( $xml, $data,
-				$data['ids']['dumpDistribPrefix'], 'dump', $key );
+			$distIds = writeDistribution( $xml, $data, 'dump', $key );
 			array_push( $dataset,
-				writeDataset( $xml, $data, $key,
-					$data['ids']['dumpDatasetPrefix'],
-					$data['ids']['publisher'],
-					$data['ids']['contactPoint'], $distIds )
+				writeDataset( $xml, $data, $key, $distIds )
 			);
 		}
 	}
 
-	writeCatalog( $xml, $data, $data['ids']['publisher'], $dataset );
+	writeCatalog( $xml, $data, $dataset );
 
 	// Closing last XML node
 	$xml->endElement();
@@ -634,11 +623,11 @@ function scanDump( $dirname, array $data ) {
 		// $subdir = testdirNew/20150120
 		$subDump = array();
 		foreach ( glob( $subdir . '/*' ) as $filename ) {
-			// match each file against an expected testString
+			// match each file against an expected test string
 			foreach ( $testStrings as $fileEnding => $testString ) {
 				if ( substr( $filename, -strlen( $testString ) ) === $testString ) {
 					$info = stat( $filename );
-					$filename = substr( $filename, strlen( $subdir . '/' ) );
+					$filename = substr( $filename, strlen( $dirname . '/' ) );
 					$subDump[$fileEnding] = array(
 						'timestamp' => gmdate( 'Y-m-d', $info['mtime'] ),
 						'byteSize' => $info['size'],

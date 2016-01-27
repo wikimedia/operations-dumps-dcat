@@ -10,5 +10,5 @@
 	"dataset-dump-description": "היטל סטטי של כל הישויות עבור תאריך נתון.",
 	"distribution-ld-description": "נקודת קצה של נתונים מקושרים. התסדיר נפתר דרך משא ומתן של תוכן.",
 	"distribution-api-description": "נקודת קצה של API של מדיה־ויקי. התסדיר ניתן דרך הפרמטר \"format\".",
-	"distribution-dump-description": "קובץ $1 ב־gzip."
+	"distribution-dump-description": "קובץ $1, מכווץ ב־$2."
 }

@@ -10,5 +10,5 @@
 	"dataset-dump-description": "Un dump statico di tutte le entità per la data indicata.",
 	"distribution-ld-description": "Il punto finale di Linked Data. Il formato è risolto attraverso la negoziazione dei contenuti.",
 	"distribution-api-description": "Il punto finale delle API MediaWiki. Il formato è dato attraverso il parametro \"format\".",
-	"distribution-dump-description": "Un file $1 gzip."
+	"distribution-dump-description": "Un file $1, compresso $2."
 }

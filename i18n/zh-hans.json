@@ -10,5 +10,5 @@
 	"dataset-dump-description": "所有实体在指定日期的静态转储。",
 	"distribution-ld-description": "被链接数据的末端。格式会通过内容协商以解决。",
 	"distribution-api-description": "MediaWiki API末端。格式会通过“format”参数提供。",
-	"distribution-dump-description": "一个gzip格式的$1文件。"
+	"distribution-dump-description": "一个$1文件，压缩格式为$2。"
 }

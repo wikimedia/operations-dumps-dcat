@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"Tom29739"
+		]
+	},
+	"dataset-dump-description": "A static dump of all entities for the given date.",
+	"distribution-dump-description": "A $1 file, $2 compressed."
+}

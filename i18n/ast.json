@@ -10,5 +10,5 @@
 	"dataset-dump-description": "Un volcáu estáticu de toles entidaes n'una data determinada.",
 	"distribution-ld-description": "Puntu final de Datos enllazaos. El formatu resuélvese por negociación de conteníu.",
 	"distribution-api-description": "El puntu final de la API de MediaWiki. El formatu dase col parámetru «format».",
-	"distribution-dump-description": "Un archivu $1 comprimíu con gzip."
+	"distribution-dump-description": "Un archivu $1 comprimíu con $2."
 }

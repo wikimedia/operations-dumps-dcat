@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Lokal_Profil"
+			"Lokal_Profil",
+			"Lokal Profil"
 		]
 	},
 	"dataset-live-title": "Direkt åtkomst",
@@ -10,5 +11,5 @@
 	"dataset-dump-description": "En statisk dump av alla objekt för det angivna datumet.",
 	"distribution-ld-description": "Länkade data-accesspunkten. Formatet ges genom content negotiation.",
 	"distribution-api-description": "MediaWiki API-accesspunkten. Formatet ges genom \"format\"-parametern.",
-	"distribution-dump-description": "En gzipad $1-fil."
+	"distribution-dump-description": "En $1-fil, $2-komprimerad."
 }

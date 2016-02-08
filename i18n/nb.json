@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"SuperPotato"
+		]
+	},
+	"dataset-live-title": "Direkte tilgang",
+	"dataset-live-description": "Den aktuelle versjonen av dataen, inkluderer objekter og egenskaper. Bare ikke-foreldet formater er listet som distribusjoner.",
+	"dataset-dump-title": "Objekt dump fra $1",
+	"dataset-dump-description": "En statisk dump av alle innlegg for den avgitte datoen.",
+	"distribution-ld-description": "The Linked Data sluttpunkt. Format blir løst igjennom innhold forhandling."
+}

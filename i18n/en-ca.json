@@ -1,9 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Rbix"
+			"Rbix",
+			"Lokal Profil"
 		]
 	},
 	"dataset-dump-title": "Entity dump of $1",
-	"distribution-dump-description": "A gzipped $1 file."
+	"distribution-dump-description": "A $1 file, $2 compressed."
 }

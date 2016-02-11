@@ -8,5 +8,7 @@
 	"dataset-live-description": "Den aktuelle versjonen av dataen, inkluderer objekter og egenskaper. Bare ikke-foreldet formater er listet som distribusjoner.",
 	"dataset-dump-title": "Objekt dump fra $1",
 	"dataset-dump-description": "En statisk dump av alle innlegg for den avgitte datoen.",
-	"distribution-ld-description": "The Linked Data sluttpunkt. Format blir løst igjennom innhold forhandling."
+	"distribution-ld-description": "The Linked Data sluttpunkt. Format blir løst igjennom innhold forhandling.",
+	"distribution-api-description": "MediaWiki API-tilgangpunktet. Formatet går igjennom \"format\"-parameteren.",
+	"distribution-dump-description": "En $1-fil, $2-komprimert."
 }

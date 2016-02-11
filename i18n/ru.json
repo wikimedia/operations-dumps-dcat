@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Laboramus",
-			"Okras"
+			"Okras",
+			"Iniquity"
 		]
 	},
 	"dataset-live-title": "Прямой доступ",
@@ -11,5 +12,5 @@
 	"dataset-dump-description": "Статичный дамп всех записей на заданную дату.",
 	"distribution-ld-description": "Точка доступа Linked Data. Формат определяется протоколом согласования содержимого.",
 	"distribution-api-description": "Точка доступа для MediaWiki API. Формат задаётся параметром \"format\".",
-	"distribution-dump-description": "Сжатый в gzip $1-файл."
+	"distribution-dump-description": "Файл $1, $2 сжат."
 }

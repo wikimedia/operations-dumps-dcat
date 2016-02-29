@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Mervat Salman"
+			"Mervat Salman",
+			"محمد أحمد عبد الفتاح"
 		]
 	},
+	"dataset-live-title": "الوصول المباشر",
 	"distribution-dump-description": "ملف $1 مضغوط."
 }

@@ -6,7 +6,10 @@
 		]
 	},
 	"dataset-live-title": "Tiräkte Zohjang",
-	"dataset-dump-description": "Ene schtattesche Ußworf vun all dä entites  för e förjejovve Dattom.",
-	"distribution-api-description": "Dem MehdijaWikki singe API Ändpongk. Et Fommahd weed mem Parramehter \n„format“ aanjejovve.",
-	"distribution-dump-description": "En Dattei em Fommaht $1, kompremmehrt met $2.\n<!--  https://translatewiki.net/wiki/Thread:Support/xml_tags_in_ksh_translation -->"
+	"dataset-live-description": "De aktoäle Väsjohn vun de Dahte, met de Saache un un Eijeschaffte dren. Blohß de nidd övverhollt Fommahte wähde zom Verdeijle opjeleß.",
+	"dataset-dump-title": "Ußworf vun dä Saach $1",
+	"dataset-dump-description": "Ene schtattesche Ußworf vun all dä Saache för e förjejovve Dattom.",
+	"distribution-ld-description": "Dä verbonge Dahte iehre Ändpongk. Et Fommahd weed zwesche de Projramme ußjehanndelt.",
+	"distribution-api-description": "Dem MehdijaWikki singe Ändpongk vun dä API. Et Fommahd weed mem Parramehter „format“ aanjejovve.",
+	"distribution-dump-description": "En Dattei em Fommaht $1, kompremmehrt met $2."
 }

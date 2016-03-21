@@ -1,9 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
-			"Gwenn-Ael"
+			"Gwenn-Ael",
+			"Lokal Profil"
 		]
 	},
 	"dataset-live-title": "Mont war-eeun",
-	"distribution-dump-description": "Ur restr $1 er furmad gzip."
+	"distribution-dump-description": "Ur restr $1 er furmad $2."
 }

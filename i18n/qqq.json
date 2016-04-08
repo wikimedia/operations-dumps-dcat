@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Lokal_Profil"
+			"Lokal_Profil",
+			"Nike"
 		]
 	},
 	"dataset-live-title": "The title for the live access dataset",
@@ -10,5 +11,5 @@
 	"dataset-dump-description": "The description of the entity dump for the given date.",
 	"distribution-ld-description": "The description of the Linked Data endpoint. For content negotiation see https://en.wikipedia.org/wiki/Content_negotiation",
 	"distribution-api-description": "The description of the MediaWiki API endpoint. Leave \"format\" untranslated.",
-	"distribution-dump-description": "The description of a dump file where $1 is the file format and $2 the compression format."
+	"distribution-dump-description": "The description of a dump file where $1 is the file format (e.g. \"json\") and $2 the compression format (e.g. \"gzip\")."
 }

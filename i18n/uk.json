@@ -1,8 +1,15 @@
 {
 	"@metadata": {
 		"authors": [
-			"Григорій Пугач"
+			"Григорій Пугач",
+			"Piramidion"
 		]
 	},
-	"dataset-live-title": "Доступ у реальному часі"
+	"dataset-live-title": "Доступ у реальному часі",
+	"dataset-live-description": "Жива версія даних, включає сутності й властивості. Лише не застарілі формати потрапляють у список як поширення.",
+	"dataset-dump-title": "Дамп сутності за $1",
+	"dataset-dump-description": "Статичний дамп усіх сутностей для заданої дати.",
+	"distribution-ld-description": "Кінцева точка пов'язаних даних. Формат визначається через узгодження вмісту.",
+	"distribution-api-description": "Кінцева точка MediaWiki API.Формат задається через параметр «format».",
+	"distribution-dump-description": "Файл $1, стиснений як $2."
 }

@@ -1,8 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Cwlin0416"
+			"Cwlin0416",
+			"Kly"
 		]
 	},
-	"distribution-dump-description": "一個已用 gzip 壓縮的 $1 檔案。"
+	"dataset-live-title": "線上存取",
+	"distribution-api-description": "MediaWiki API端點。格式以通過「format」參數提供。",
+	"distribution-dump-description": "一個$2壓縮格式的$1檔案。"
 }

@@ -6,6 +6,10 @@
 		]
 	},
 	"dataset-live-title": "線上存取",
+	"dataset-live-description": "資料的線上版本包含項目和屬性。只有非棄用的格式才會列為分佈。",
+	"dataset-dump-title": "$1的項目匯出",
+	"dataset-dump-description": "靜態傾印在指定日期裡所有項目。",
+	"distribution-ld-description": "連結資料端點。格式以HTTP內容協商機制處理。",
 	"distribution-api-description": "MediaWiki API端點。格式以通過「format」參數提供。",
 	"distribution-dump-description": "一個$2壓縮格式的$1檔案。"
 }

@@ -2,9 +2,14 @@
 	"@metadata": {
 		"authors": [
 			"Mervat Salman",
-			"محمد أحمد عبد الفتاح"
+			"محمد أحمد عبد الفتاح",
+			"ديفيد"
 		]
 	},
 	"dataset-live-title": "الوصول المباشر",
-	"distribution-dump-description": "ملف $1 مضغوط."
+	"dataset-live-description": "نسخة حية من البيانات، وتشمل الكيانات والخصائص. الصيغ غير الموقوفة وحدها موجودة في القائمة كتوزيعات.",
+	"dataset-dump-title": "تفريغ كيان من $1",
+	"dataset-dump-description": "تفريغ ثابت لجميع الكيانات لتاريخ معين.",
+	"distribution-ld-description": "نقطة النهاية للبيانات المرتبطة. يتم حل تنسيق المحتوى من خلال التفاوض.",
+	"distribution-dump-description": "ملف $1، $2 مضغوط."
 }

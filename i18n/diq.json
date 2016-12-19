@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Kumkumuk"
+			"Kumkumuk",
+			"Gırd"
 		]
 	},
-	"dataset-live-title": "Weşin cıresayış",
+	"dataset-live-title": "Cıresayışo gani",
 	"dataset-dump-title": "Çapa estan dê $1",
 	"distribution-dump-description": "Dosyay $1, $2 de degusneyê."
 }

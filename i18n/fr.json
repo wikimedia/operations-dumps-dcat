@@ -1,11 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"Wladek92"
+			"Wladek92",
+			"Urhixidur"
 		]
 	},
 	"dataset-live-title": "Accès direct",
-	"dataset-live-description": "La version courante des données, comprend les entités et les propriétés. Seuls les formats non obsolètes sont répertoriés comme des distributions.",
+	"dataset-live-description": "La version courante des données, comprenant les entités et les propriétés. Seuls les formats non désuets sont répertoriés comme des distributions.",
 	"dataset-dump-title": "Données de l'entité $1",
 	"dataset-dump-description": "Vidage statique de toutes les entités à la date donnée.",
 	"distribution-ld-description": "Le point de terminaison des données liées. Le Format est résolu par la négociation du contenu.",

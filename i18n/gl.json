@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Elisardojm"
+		]
+	},
+	"dataset-live-title": "Acceso en vivo",
+	"dataset-live-description": "A versión en directo dos datos, incluíndo entidades e propiedades. Só se amosan como distribucións os formatos que non están obsoletos.",
+	"dataset-dump-title": "Volcado da entidade $1",
+	"dataset-dump-description": "Volcado estático de tódalas entidades para a data dada.",
+	"distribution-dump-description": "Un ficheiro $1, comprimido co formato $2."
+}

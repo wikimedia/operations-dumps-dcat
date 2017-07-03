@@ -8,5 +8,7 @@
 	"dataset-live-description": "A versión en directo dos datos, incluíndo entidades e propiedades. Só se amosan como distribucións os formatos que non están obsoletos.",
 	"dataset-dump-title": "Volcado da entidade $1",
 	"dataset-dump-description": "Volcado estático de tódalas entidades para a data dada.",
+	"distribution-ld-description": "O extremo dos datos vinculados. O formato resólvese a través da negociación de contido.",
+	"distribution-api-description": "O extremo da API de MediaWiki. O formato dase a través do parámetro \"format\".",
 	"distribution-dump-description": "Un ficheiro $1, comprimido co formato $2."
 }

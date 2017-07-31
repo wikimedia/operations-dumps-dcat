@@ -8,5 +8,7 @@
 	"dataset-live-description": "'A versione dal vive de le date, 'nglude entità e probbietà. Sulamende le formate none deprecate avènene elengate a le distributure.",
 	"dataset-dump-title": "Dump de l'entità 'u $1",
 	"dataset-dump-description": "'Nu dump stateche de tutte le entità pa date scacchiate.",
+	"distribution-ld-description": "Destinazione Linked Data. 'U formate avène resolte cu 'a negoziazione de le condenute.",
+	"distribution-api-description": "Destinazione de le API MediaUicchi. 'U formate avène date cu l'ause d'u parametre \"format\".",
 	"distribution-dump-description": "Nu $1 file, $2 combresse."
 }

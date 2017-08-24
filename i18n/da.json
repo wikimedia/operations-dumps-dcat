@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Joedalton"
+		]
+	},
+	"dataset-live-title": "Live adgang",
+	"dataset-live-description": "Live-versionen af dataene, inkluderer objekter og egenskaber. Kun ikke forældede formater vises som distributioner.",
+	"dataset-dump-title": "Objektdump af $1",
+	"dataset-dump-description": "Et statisk dump af alle objekter for den givne dato.",
+	"distribution-ld-description": "Linked Data-slutpunktet. Format slås op via indholdsforhandling.",
+	"distribution-api-description": "MediaWiki API-slutpunktet. Formatet gives via parameteren »format«.",
+	"distribution-dump-description": "En $1-fil, $2-komprimeret."
+}

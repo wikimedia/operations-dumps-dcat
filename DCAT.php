@@ -275,7 +275,11 @@ function writeDistribution( XMLWriter $xml, array $data, $prefix, $dumpDate ) {
 				);
 			}
 
-			$xml->writeElementNS( 'dcterms', 'format', null, $mediatype );
+			$contentType = $mediatype;
+			if ( $isDump ) {
+				$contentType = $mediatype['contentType'];
+			}
+			$xml->writeElementNS( 'dcterms', 'format', null, $contentType );
 
 			// add description in each language
 			writeDistributionI18n( $xml, $data, $prefix, $format,
@@ -610,7 +614,11 @@ function scanDump( $dirname, array $data ) {
 	$testStrings = array();
 	foreach ( $data['config']['dump-info']['compression'] as $compression ) {
 		foreach ( $data['config']['dump-info']['mediatype'] as $format => $mediatype ) {
-			$testStrings["$format$compression"] = '-all.' . $format . '.' . $compression;
+			$prefix = '';
+			if ( array_key_exists( 'prefix', $mediatype ) ) {
+				$prefix = $mediatype['prefix'];
+			}
+			$testStrings["$format$compression"] = '-all' . $prefix . '.' . $format . '.' . $compression;
 		}
 	}
 

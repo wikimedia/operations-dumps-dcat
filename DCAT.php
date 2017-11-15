@@ -163,22 +163,20 @@ function dumpDistributionExtras( XMLWriter $xml, array $dump, $accessURL ) {
 	);
 
 	$xml->startElementNS( 'dcat', 'accessURL', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null, $url );
+	$xml->writeAttribute( 'rdf:resource', $url );
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcat', 'downloadURL', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null, $url );
+	$xml->writeAttribute( 'rdf:resource', $url );
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcterms', 'issued', null );
-	$xml->writeAttributeNS( 'rdf', 'datatype', null,
-		'http://www.w3.org/2001/XMLSchema#date' );
+	$xml->writeAttribute( 'rdf:datatype', 'http://www.w3.org/2001/XMLSchema#date' );
 	$xml->text( $dump['timestamp'] );
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcat', 'byteSize', null );
-	$xml->writeAttributeNS( 'rdf', 'datatype', null,
-		'http://www.w3.org/2001/XMLSchema#decimal' );
+	$xml->writeAttribute( 'rdf:datatype', 'http://www.w3.org/2001/XMLSchema#decimal' );
 	$xml->text( $dump['byteSize'] );
 	$xml->endElement();
 }
@@ -211,7 +209,7 @@ function writeDistributionI18n( XMLWriter $xml, array $data, $prefix,
 				);
 			}
 			$xml->startElementNS( 'dcterms', 'description', null );
-			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
+			$xml->writeAttribute( 'xml:lang', $langCode );
 			$xml->text( $formatDescription );
 			$xml->endElement();
 		}
@@ -253,21 +251,21 @@ function writeDistribution( XMLWriter $xml, array $data, $prefix, $dumpDate ) {
 			array_push( $ids, $id );
 
 			$xml->startElementNS( 'rdf', 'Description', null );
-			$xml->writeAttributeNS( 'rdf', 'about', null, $id );
+			$xml->writeAttribute( 'rdf:about', $id );
 
 			$xml->startElementNS( 'rdf', 'type', null );
-			$xml->writeAttributeNS( 'rdf', 'resource', null,
+			$xml->writeAttribute( 'rdf:resource',
 				'http://www.w3.org/ns/dcat#Distribution' );
 			$xml->endElement();
 
 			$xml->startElementNS( 'dcterms', 'license', null );
-			$xml->writeAttributeNS( 'rdf', 'resource', null,
+			$xml->writeAttribute( 'rdf:resource',
 				$data['config']["$prefix-info"]['license'] );
 			$xml->endElement();
 
 			if ( !$isDump ) {
 				$xml->startElementNS( 'dcat', 'accessURL', null );
-				$xml->writeAttributeNS( 'rdf', 'resource', null,
+				$xml->writeAttribute( 'rdf:resource',
 					$data['config']["$prefix-info"]['accessURL'] );
 				$xml->endElement();
 			} else {
@@ -302,7 +300,7 @@ function writeDatasetI18n( XMLWriter $xml, array $data, $dumpDate, $type ) {
 	foreach ( $data['i18n'] as $langCode => $langData ) {
 		if ( array_key_exists( "dataset-$type-title", $langData ) ) {
 			$xml->startElementNS( 'dcterms', 'title', null );
-			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
+			$xml->writeAttribute( 'xml:lang', $langCode );
 			if ( $type === 'live' ) {
 				$xml->text( $langData['dataset-live-title'] );
 			} else {
@@ -314,7 +312,7 @@ function writeDatasetI18n( XMLWriter $xml, array $data, $dumpDate, $type ) {
 		}
 		if ( array_key_exists( "dataset-$type-description", $langData ) ) {
 			$xml->startElementNS( 'dcterms', 'description', null );
-			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
+			$xml->writeAttribute( 'xml:lang', $langCode );
 			$xml->text( $langData["dataset-$type-description"] );
 			$xml->endElement();
 		}
@@ -338,24 +336,24 @@ function writeDataset( XMLWriter $xml, array $data, $dumpDate, array $distributi
 	$id = $data['config']['uri'] . '#' . $data['ids']['dataset'][$type] . $dumpDate;
 
 	$xml->startElementNS( 'rdf', 'Description', null );
-	$xml->writeAttributeNS( 'rdf', 'about', null, $id );
+	$xml->writeAttribute( 'rdf:about', $id );
 
 	$xml->startElementNS( 'rdf', 'type', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null,
+	$xml->writeAttribute( 'rdf:resource',
 		'http://www.w3.org/ns/dcat#Dataset' );
 	$xml->endElement();
 
 	$xml->startElementNS( 'adms', 'contactPoint', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['contactPoint'] );
+	$xml->writeAttribute( 'rdf:nodeID', $data['ids']['contactPoint'] );
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcterms', 'publisher', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['publisher'] );
+	$xml->writeAttribute( 'rdf:nodeID', $data['ids']['publisher'] );
 	$xml->endElement();
 
 	if ( is_null( $dumpDate ) ) {
 		$xml->startElementNS( 'dcterms', 'accrualPeriodicity', null );
-		$xml->writeAttributeNS( 'rdf', 'resource', null,
+		$xml->writeAttribute( 'rdf:resource',
 			'http://purl.org/cld/freq/continuous' );
 		$xml->endElement();
 	}
@@ -368,7 +366,7 @@ function writeDataset( XMLWriter $xml, array $data, $dumpDate, array $distributi
 	// add themes
 	foreach ( $data['config']['themes'] as $key => $keyword ) {
 		$xml->startElementNS( 'dcat', 'theme', null );
-		$xml->writeAttributeNS( 'rdf', 'resource', null,
+		$xml->writeAttribute( 'rdf:resource',
 			"http://eurovoc.europa.eu/$keyword" );
 		$xml->endElement();
 	}
@@ -379,7 +377,7 @@ function writeDataset( XMLWriter $xml, array $data, $dumpDate, array $distributi
 	// add distributions
 	foreach ( $distribution as $key => $value ) {
 		$xml->startElementNS( 'dcat', 'distribution', null );
-		$xml->writeAttributeNS( 'rdf', 'resource', null, $value );
+		$xml->writeAttribute( 'rdf:resource', $value );
 		$xml->endElement();
 	}
 
@@ -395,10 +393,10 @@ function writeDataset( XMLWriter $xml, array $data, $dumpDate, array $distributi
  */
 function writePublisher( XMLWriter $xml, array $data ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['publisher'] );
+	$xml->writeAttribute( 'rdf:nodeID', $data['ids']['publisher'] );
 
 	$xml->startElementNS( 'rdf', 'type', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null,
+	$xml->writeAttribute( 'rdf:resource',
 		'http://xmlns.com/foaf/0.1/Agent' );
 	$xml->endElement();
 
@@ -406,7 +404,7 @@ function writePublisher( XMLWriter $xml, array $data ) {
 		$data['config']['publisher']['name'] );
 
 	$xml->startElementNS( 'dcterms', 'type', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null,
+	$xml->writeAttribute( 'rdf:resource',
 		'http://purl.org/adms/publishertype/' .
 			$data['config']['publisher']['publisherType'] );
 	$xml->endElement();
@@ -415,7 +413,7 @@ function writePublisher( XMLWriter $xml, array $data ) {
 		$data['config']['publisher']['homepage'] );
 
 	$xml->startElementNS( 'vcard', 'hasEmail', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null,
+	$xml->writeAttribute( 'rdf:resource',
 		'mailto:' . $data['config']['publisher']['email'] );
 	$xml->endElement();
 
@@ -430,16 +428,16 @@ function writePublisher( XMLWriter $xml, array $data ) {
  */
 function writeContactPoint( XMLWriter $xml, array $data ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['contactPoint'] );
+	$xml->writeAttribute( 'rdf:nodeID', $data['ids']['contactPoint'] );
 
 	$xml->startElementNS( 'rdf', 'type', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null,
+	$xml->writeAttribute( 'rdf:resource',
 		'http://www.w3.org/2006/vcard/ns#' .
 			$data['config']['contactPoint']['vcardType'] );
 	$xml->endElement();
 
 	$xml->startElementNS( 'vcard', 'hasEmail', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null,
+	$xml->writeAttribute( 'rdf:resource',
 		'mailto:' . $data['config']['contactPoint']['email'] );
 	$xml->endElement();
 
@@ -458,19 +456,19 @@ function writeContactPoint( XMLWriter $xml, array $data ) {
 function writeCatalogI18n( XMLWriter $xml, array $data ) {
 		foreach ( $data['i18n'] as $langCode => $langData ) {
 		$xml->startElementNS( 'dcterms', 'language', null );
-		$xml->writeAttributeNS( 'rdf', 'resource', null,
+		$xml->writeAttribute( 'rdf:resource',
 			"http://id.loc.gov/vocabulary/iso639-1/$langCode" );
 		$xml->endElement();
 
 		if ( array_key_exists( 'catalog-title', $langData ) ) {
 			$xml->startElementNS( 'dcterms', 'title', null );
-			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
+			$xml->writeAttribute( 'xml:lang', $langCode );
 			$xml->text( $langData['catalog-title'] );
 			$xml->endElement();
 		}
 		if ( array_key_exists( 'catalog-description', $langData ) ) {
 			$xml->startElementNS( 'dcterms', 'description', null );
-			$xml->writeAttributeNS( 'xml', 'lang', null, $langCode );
+			$xml->writeAttribute( 'xml:lang', $langCode );
 			$xml->text( $langData['catalog-description'] );
 			$xml->endElement();
 		}
@@ -486,21 +484,21 @@ function writeCatalogI18n( XMLWriter $xml, array $data ) {
  */
 function writeCatalog( XMLWriter $xml, array $data, array $dataset ) {
 	$xml->startElementNS( 'rdf', 'Description', null );
-	$xml->writeAttributeNS( 'rdf', 'about', null,
+	$xml->writeAttribute( 'rdf:about',
 		$data['config']['uri'] . '#catalog' );
 
 	$xml->startElementNS( 'rdf', 'type', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null,
+	$xml->writeAttribute( 'rdf:resource',
 		'http://www.w3.org/ns/dcat#Catalog' );
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcterms', 'license', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null,
+	$xml->writeAttribute( 'rdf:resource',
 		$data['config']['catalog-license'] );
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcat', 'themeTaxonomy', null );
-	$xml->writeAttributeNS( 'rdf', 'resource', null,
+	$xml->writeAttribute( 'rdf:resource',
 		'http://eurovoc.europa.eu/' );
 	$xml->endElement();
 
@@ -508,19 +506,19 @@ function writeCatalog( XMLWriter $xml, array $data, array $dataset ) {
 		$data['config']['catalog-homepage'] );
 
 	$xml->startElementNS( 'dcterms', 'modified', null );
-	$xml->writeAttributeNS( 'rdf', 'datatype', null,
+	$xml->writeAttribute( 'rdf:datatype',
 		'http://www.w3.org/2001/XMLSchema#date' );
 	$xml->text( date( 'Y-m-d' ) );
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcterms', 'issued', null );
-	$xml->writeAttributeNS( 'rdf', 'datatype', null,
+	$xml->writeAttribute( 'rdf:datatype',
 		'http://www.w3.org/2001/XMLSchema#date' );
 	$xml->text( $data['config']['catalog-issued'] );
 	$xml->endElement();
 
 	$xml->startElementNS( 'dcterms', 'publisher', null );
-	$xml->writeAttributeNS( 'rdf', 'nodeID', null, $data['ids']['publisher'] );
+	$xml->writeAttribute( 'rdf:nodeID', $data['ids']['publisher'] );
 	$xml->endElement();
 
 	// add language, title and description in each language
@@ -529,7 +527,7 @@ function writeCatalog( XMLWriter $xml, array $data, array $dataset ) {
 	// add datasets
 	foreach ( $dataset as $key => $value ) {
 		$xml->startElementNS( 'dcat', 'dataset', null );
-		$xml->writeAttributeNS( 'rdf', 'resource', null, $value );
+		$xml->writeAttribute( 'rdf:resource', $value );
 		$xml->endElement();
 	}
 
@@ -552,17 +550,17 @@ function outputXml( array $data ) {
 	// set namespaces
 	$xml->startDocument( '1.0', 'UTF-8' );
 	$xml->startElementNS( 'rdf', 'RDF', null );
-	$xml->writeAttributeNS( 'xmlns', 'rdf', null,
+	$xml->writeAttribute( 'xmlns:rdf',
 		'http://www.w3.org/1999/02/22-rdf-syntax-ns#' );
-	$xml->writeAttributeNS( 'xmlns', 'dcterms', null,
+	$xml->writeAttribute( 'xmlns:dcterms',
 		'http://purl.org/dc/terms/' );
-	$xml->writeAttributeNS( 'xmlns', 'dcat', null,
+	$xml->writeAttribute( 'xmlns:dcat',
 		'http://www.w3.org/ns/dcat#' );
-	$xml->writeAttributeNS( 'xmlns', 'foaf', null,
+	$xml->writeAttribute( 'xmlns:foaf',
 		'http://xmlns.com/foaf/0.1/' );
-	$xml->writeAttributeNS( 'xmlns', 'adms', null,
+	$xml->writeAttribute( 'xmlns:adms',
 		'http://www.w3.org/ns/adms#' );
-	$xml->writeAttributeNS( 'xmlns', 'vcard', null,
+	$xml->writeAttribute( 'xmlns:vcard',
 		'http://www.w3.org/2006/vcard/ns#' );
 
 	// Calls previously declared functions to construct xml

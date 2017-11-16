@@ -44,7 +44,7 @@ The live DCAT-AP description of Wikidata can be found [here](https://dumps.wikim
 *   Translations which are specific to a project/catalog are added to
     the location specified in the `catalog-i18n` parameter of the config
     file.
-
+*   To lint translations files: npm install && npm test.
 
 ## Config
 

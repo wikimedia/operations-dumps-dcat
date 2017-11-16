@@ -46,6 +46,20 @@ The live DCAT-AP description of Wikidata can be found [here](https://dumps.wikim
     file.
 *   To lint translations files: npm install && npm test.
 
+## Linting
+
+We use various utilities to lint this repository. You would first want to get
+the dependencies:
+```
+composer install
+npm install
+```
+Then run the tests:
+```
+composer test
+npm test
+```
+
 ## Config
 
 Below follows a key by key explanation of the config file.

@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Eduardo Addad de Oliveira",
+			"Warley Felipe C."
+		]
+	},
+	"dataset-live-title": "Acesso ao vivo",
+	"dataset-live-description": "A versão em direto dos dados, inclui as entidades e propriedades. Apenas estão listados como distribuições os formatos que não estão obsoletos.",
+	"dataset-dump-title": "Despejo da entidade $1",
+	"dataset-dump-description": "Desejo estático de todas as entidades para a data determinada.",
+	"distribution-ld-description": "O parâmetro dos dados vinculados. O formato é solucionado através da negociação de conteúdo.",
+	"distribution-api-description": "O parâmetro da API da MediaWiki. O formato é atribuído através do parâmetro \"format\".",
+	"distribution-dump-description": "Um ficheiro $1, comprimido com o formato $2."
+}

@@ -2,11 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Reza1615",
-			"Leyth"
+			"Leyth",
+			"Alifakoor"
 		]
 	},
 	"dataset-live-title": "دسترسی زنده",
 	"dataset-live-description": "نسخهٔ زندهٔ داده‌ها که شامل موجودیت‌ها و خصوصیات است. در اینجا تنها قالب‌های غیرمردود به عنوان توزیع‌ها فهرست شده‌اند.",
 	"dataset-dump-title": "دامپ محتوی $1",
+	"dataset-dump-description": "استخراج یک نسخهٔ ایستا از تمام مدخل‌ها در تاریخ خواسته‌شده.",
 	"distribution-dump-description": "فایل فشرده gziped $1"
 }

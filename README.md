@@ -103,7 +103,7 @@ Below follows a key by key explanation of the config file.
     *   `accessURL`: URL to the content negotiation endpoint of the
         WikiBase installation, e.g. *http://www.example.org/entity/*
     *   `mediatype`: (`object`) List of [IANA media types](http://www.iana.org/assignments/media-types/)
-        available through content negotiation in the format *file-ending:media-type*
+        available through content negotiation in the format *fileformat:media-type*
     *   `license`: License of the data in the distribution, e.g.
         *http://creativecommons.org/publicdomain/zero/1.0/*
 *   `api-info`:
@@ -116,10 +116,17 @@ Below follows a key by key explanation of the config file.
     *   `accessURL`: URL to the directory where the *.json.gz* files
         reside (`$1` is replaced on the fly by the actual filename),
         e.g. *http://example.org/dumps/$1*
-    *   `mediatype`: (`object`) List of media types and prefixes. e.g.
-        `"json": {"contentType": "application/json"}` or
-        `"ttl": {"contentType": "text/turtle", "prefix": "all-BETA"}`.
-        The prefix defaults to "all" if not specified.
+    *   `mediatype`: List of *fileformat:media-type* pairs where media-type is
+        either an [IANA media types](http://www.iana.org/assignments/media-types/)
+        or an `object` containing one or more of the following keys:
+        *   `"contentType"`: [IANA media types](http://www.iana.org/assignments/media-types/)
+        *   `"prefix"`: prefixed used in the filename. Defaults to "all" if not
+            specified.
+        *   `"format"`: overrides the fileformat useda as key for the list. The
+            list key is still used for i18n description.
+        Examples:
+        `"json": "application/json"` or
+        `"truthy-nt": {"contentType": "application/n-triples", "prefix": "ruthy-BETA", "format": "nt"}`.
     *   `compression`: (`object`) List of compression formats, in the
-        format *name:file-ending* e.g. `{"gzip": "gz"}`
+        format *name:fileformat* e.g. `{"gzip": "gz"}`
     *   `license`: See ld-info:license above

@@ -276,7 +276,7 @@ function writeDistribution( XMLWriter $xml, array $data, $prefix, $dumpDate ) {
 			}
 
 			$contentType = $mediatype;
-			if ( $isDump ) {
+			if ( $isDump && is_array( $mediatype ) ) {
 				$contentType = $mediatype['contentType'];
 			}
 			$xml->writeElementNS( 'dcterms', 'format', null, $contentType );
@@ -615,7 +615,7 @@ function scanDump( $dirname, array $data ) {
 	foreach ( $data['config']['dump-info']['compression'] as $compression ) {
 		foreach ( $data['config']['dump-info']['mediatype'] as $format => $mediatype ) {
 			$prefix = '';
-			if ( array_key_exists( 'prefix', $mediatype ) ) {
+			if ( is_array( $mediatype ) && array_key_exists( 'prefix', $mediatype ) ) {
 				$prefix = $mediatype['prefix'];
 			}
 			$testStrings["$format$compression"] = '-all' . $prefix . '.' . $format . '.' . $compression;

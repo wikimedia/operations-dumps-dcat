@@ -614,11 +614,11 @@ function scanDump( $dirname, array $data ) {
 	$testStrings = array();
 	foreach ( $data['config']['dump-info']['compression'] as $compression ) {
 		foreach ( $data['config']['dump-info']['mediatype'] as $format => $mediatype ) {
-			$prefix = '';
+			$prefix = 'all';
 			if ( is_array( $mediatype ) && array_key_exists( 'prefix', $mediatype ) ) {
 				$prefix = $mediatype['prefix'];
 			}
-			$testStrings["$format$compression"] = '-all' . $prefix . '.' . $format . '.' . $compression;
+			$testStrings["$format$compression"] = '-' . $prefix . '.' . $format . '.' . $compression;
 		}
 	}
 

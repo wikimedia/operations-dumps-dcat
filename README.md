@@ -118,7 +118,8 @@ Below follows a key by key explanation of the config file.
         e.g. *http://example.org/dumps/$1*
     *   `mediatype`: (`object`) List of media types and prefixes. e.g.
         `"json": {"contentType": "application/json"}` or
-        `"ttl": {"contentType": "text/turtle", "prefix": "-BETA"}`
+        `"ttl": {"contentType": "text/turtle", "prefix": "all-BETA"}`.
+        The prefix defaults to "all" if not specified.
     *   `compression`: (`object`) List of compression formats, in the
         format *name:file-ending* e.g. `{"gzip": "gz"}`
     *   `license`: See ld-info:license above

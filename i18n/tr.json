@@ -2,10 +2,15 @@
 	"@metadata": {
 		"authors": [
 			"Kincki",
-			"Ömer Berkay"
+			"Ömer Berkay",
+			"Hedda"
 		]
 	},
 	"dataset-live-title": "Canlı erişim",
+	"dataset-live-description": "Verilerin güncel sürümü, varlıkları ve özellikleri içerir. Yalnızca kullanım dışı biçimler, dağıtım olarak listelenir.",
 	"dataset-dump-title": "Varlık dökümü $1",
-	"distribution-dump-description": "Bir gziped $1 dosyası."
+	"dataset-dump-description": "Belirli bir tarih için tüm varlıkların statik bir dökümü.",
+	"distribution-ld-description": "Bağlantılı Veri son noktası. Format, içerik müzakeresi yoluyla çözüldü.",
+	"distribution-api-description": "MediaWiki API son noktası. Format, \"format\" parametresi ile verilir.",
+	"distribution-dump-description": "$1 dosyası, $2 olarak sıkıştırılmıştır."
 }

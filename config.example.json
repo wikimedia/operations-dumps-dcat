@@ -43,11 +43,15 @@
         "accessURL": "https://dumps.wikimedia.org/wikidatawiki/entities/$1",
         "mediatype": {
             "json": {
-                    "contentType": "application/json"
+                "contentType": "application/json"
             },
             "ttl":  {
-                    "contentType": "text/turtle",
-                    "prefix": "-BETA"
+                "contentType": "text/turtle",
+                "prefix": "all-BETA"
+            },
+            "nt":  {
+                "contentType": "application/n-triples",
+                "prefix": "truthy-BETA"
             }
         },
         "compression": {

@@ -11,5 +11,6 @@
 	"dataset-dump-title": "تفريغ كيان من $1",
 	"dataset-dump-description": "تفريغ ثابت لجميع الكيانات لتاريخ معين.",
 	"distribution-ld-description": "نقطة النهاية للبيانات المرتبطة. يتم حل تنسيق المحتوى من خلال التفاوض.",
+	"distribution-api-description": "نقطة نهاية API ميدياويكي endpoint، يتم إعطاء التنسيق من خلال الوسيط \"format\".",
 	"distribution-dump-description": "ملف $1، $2 مضغوط."
 }

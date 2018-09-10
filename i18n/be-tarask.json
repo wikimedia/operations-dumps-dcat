@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Renessaince"
+		]
+	},
+	"dataset-live-title": "Жывы доступ",
+	"dataset-live-description": "Жывая вэрсія зьвестак, уключна з элемэнтамі і ўласьцівасьцямі. Ва ўнёсак уключаныя толькі несастарэлыя фарматы.",
+	"dataset-dump-title": "Дамп элемэнту $1",
+	"dataset-dump-description": "Статычны дамп усіх элемэнтаў на дадзеную дату.",
+	"distribution-ld-description": "Канцавы пункт Linked Data. Фармат вызначаецца праз узгадненьне зьместу.",
+	"distribution-api-description": "Канцавы пункт MediaWiki API. Фармат вызначаецца праз парамэтар «format».",
+	"distribution-dump-description": "Файл $1, сьціснуты $2."
+}

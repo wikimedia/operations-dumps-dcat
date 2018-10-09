@@ -1,0 +1,10 @@
+{
+	"@metadata": [],
+	"dataset-live-title": "Pristup uživo",
+	"dataset-live-description": "Aktivna verzija podataka, uključujući entitete i svojstva. Samo nezastareli formati su navedeni kao distribucije.",
+	"dataset-dump-title": "Prikaz stanja entiteta $1",
+	"dataset-dump-description": "Statički prikaz stanja svih entiteta za zadati datum.",
+	"distribution-ld-description": "Krajnja tačka Linkovanih podataka. Format je rešen putem pregovora o sadržaju.",
+	"distribution-api-description": "Krajnja tačka API-ja Medijavikija. Format je zadat putem parametra „format”.",
+	"distribution-dump-description": "$1 datoteka, $2 komprimovan."
+}

@@ -238,6 +238,16 @@ function writeDistribution( XMLWriter $xml, array $data, $prefix, $dumpDate ) {
 
 	foreach ( $allowedCompressiontypes as $compressionName => $compression ) {
 		foreach ( $allowedMediatypes as $format => $mediatype ) {
+			$formatName = $format;
+			$contentType = $mediatype;
+			if ( is_array( $mediatype ) ) {
+				if ( array_key_exists( 'format', $mediatype ) ) {
+					$format = $mediatype['format'];
+				}
+				if ( array_key_exists( 'contentType', $mediatype ) ) {
+					$contentType = $mediatype['contentType'];
+				}
+			}
 			$distributionKey = $format . $compression;
 
 			// handle missing (and BETA) dump files
@@ -275,14 +285,10 @@ function writeDistribution( XMLWriter $xml, array $data, $prefix, $dumpDate ) {
 				);
 			}
 
-			$contentType = $mediatype;
-			if ( $isDump && is_array( $mediatype ) ) {
-				$contentType = $mediatype['contentType'];
-			}
 			$xml->writeElementNS( 'dcterms', 'format', null, $contentType );
 
 			// add description in each language
-			writeDistributionI18n( $xml, $data, $prefix, $format,
+			writeDistributionI18n( $xml, $data, $prefix, $formatName,
 				$compressionName );
 
 			$xml->endElement();
@@ -615,8 +621,13 @@ function scanDump( $dirname, array $data ) {
 	foreach ( $data['config']['dump-info']['compression'] as $compression ) {
 		foreach ( $data['config']['dump-info']['mediatype'] as $format => $mediatype ) {
 			$prefix = 'all';
-			if ( is_array( $mediatype ) && array_key_exists( 'prefix', $mediatype ) ) {
-				$prefix = $mediatype['prefix'];
+			if ( is_array( $mediatype ) ) {
+				if ( array_key_exists( 'format', $mediatype ) ) {
+					$format = $mediatype['format'];
+				}
+				if ( array_key_exists( 'prefix', $mediatype ) ) {
+					$prefix = $mediatype['prefix'];
+				}
 			}
 			$testStrings["$format$compression"] = '-' . $prefix . '.' . $format . '.' . $compression;
 		}

@@ -42,14 +42,13 @@
     "dump-info": {
         "accessURL": "https://dumps.wikimedia.org/wikidatawiki/entities/$1",
         "mediatype": {
-            "json": {
-                "contentType": "application/json"
-            },
+            "json": "application/json",
             "ttl":  {
                 "contentType": "text/turtle",
                 "prefix": "all-BETA"
             },
-            "nt":  {
+            "truthy-nt":  {
+                "format": "nt",
                 "contentType": "application/n-triples",
                 "prefix": "truthy-BETA"
             }

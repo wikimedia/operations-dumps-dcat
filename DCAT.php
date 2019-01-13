@@ -237,8 +237,8 @@ function writeDistribution( XMLWriter $xml, array $data, $prefix, $dumpDate ) {
 	}
 
 	foreach ( $allowedCompressiontypes as $compressionName => $compression ) {
-		foreach ( $allowedMediatypes as $format => $mediatype ) {
-			$formatName = $format;
+		foreach ( $allowedMediatypes as $formatName => $mediatype ) {
+			$format = $formatName;
 			$contentType = $mediatype;
 			if ( is_array( $mediatype ) ) {
 				if ( array_key_exists( 'format', $mediatype ) ) {

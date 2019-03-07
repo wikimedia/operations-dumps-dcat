@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Vlad5250"
+		]
+	},
+	"dataset-live-title": "Pristup uživo",
+	"dataset-live-description": "Verzija uživo podataka, uključujući jedinice i svojstva. Navedeni su samo nezastareli formati kao distribucije.",
+	"dataset-dump-title": "Prikaz stanja jedinice $1",
+	"dataset-dump-description": "Statički prikaz stanja svih jedinica za zadati datum.",
+	"distribution-ld-description": "Krajnja tačka Povezanih podataka. Format se rješava putem postavki sadržaja.",
+	"distribution-api-description": "Krajnja tačka izvršnika MediaWikija. Format je zadat parametom \"format\".",
+	"distribution-dump-description": "$1 datoteka komprimirana s $2."
+}

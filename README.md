@@ -126,7 +126,7 @@ Below follows a key by key explanation of the config file.
             list key is still used for i18n description.
         Examples:
         `"json": "application/json"` or
-        `"truthy-nt": {"contentType": "application/n-triples", "prefix": "ruthy-BETA", "format": "nt"}`.
+        `"truthy-nt": {"contentType": "application/n-triples", "prefix": "truthy-BETA", "format": "nt"}`.
     *   `compression`: (`object`) List of compression formats, in the
         format *name:fileformat* e.g. `{"gzip": "gz"}`
     *   `license`: See ld-info:license above

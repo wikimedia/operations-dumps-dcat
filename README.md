@@ -1,7 +1,7 @@
 DCAT-AP for Wikibase
 =================
 
-A project aimed at generating a [DCAT-AP](https://joinup.ec.europa.eu/system/files/project/c3/22/18/DCAT-AP_Final_v1.00.html)
+A project aimed at generating a [DCAT-AP](https://joinup.ec.europa.eu/sites/default/files/distribution/access_url/2018-11/014bde52-eb3c-4060-8c3c-fcd0dfc07a8a/DCAT_AP_1.2.pdf)
 document for [Wikibase](http://wikiba.se) installations
 in general and [Wikidata](http://wikidata.org) in particular.
 

@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mirin"
+		]
+	},
+	"dataset-live-title": "Aktuala atingo",
+	"dataset-live-description": "La aktuala versio de la dateno, inkluzivanta entojn kaj ecojn. Nur neevitindaj formoj estas en la listo de distribuoj.",
+	"dataset-dump-title": "Entoŝuto de $1",
+	"dataset-dump-description": "Statika ŝuto de ĉiuj entoj por la donita dato.",
+	"distribution-ld-description": "La finpunkto de Ligata Dateno. Dosierformo elektiĝas per enhavo-marĉandado.",
+	"distribution-api-description": "La finpunkto de la MediaVikia API. Dosierformon specifas la parametro \"format\".",
+	"distribution-dump-description": "$1-dosiero, densigita per $1"
+}

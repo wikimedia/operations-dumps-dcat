@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Wladek92",
-			"Urhixidur"
+			"Urhixidur",
+			"Verdy p"
 		]
 	},
 	"dataset-live-title": "Accès direct",
@@ -10,6 +11,6 @@
 	"dataset-dump-title": "Données de l'entité $1",
 	"dataset-dump-description": "Vidage statique de toutes les entités à la date donnée.",
 	"distribution-ld-description": "Le point de terminaison des données liées. Le Format est résolu par la négociation du contenu.",
-	"distribution-api-description": "Le point de terminaison de l'API MediaWiki. Le format est donné par le paramètre \"format\".",
+	"distribution-api-description": "Le point de terminaison de l’API MediaWiki. Le format est donné par le paramètre « format ».",
 	"distribution-dump-description": "Un fichier $1, compressé au format $2."
 }

@@ -3,11 +3,12 @@
 		"authors": [
 			"Kincki",
 			"Ömer Berkay",
-			"Hedda"
+			"Hedda",
+			"BaRaN6161 TURK"
 		]
 	},
 	"dataset-live-title": "Canlı erişim",
-	"dataset-live-description": "Verilerin güncel sürümü, varlıkları ve özellikleri içerir. Yalnızca kullanım dışı biçimler, dağıtım olarak listelenir.",
+	"dataset-live-description": "Verilerin canlı sürümü, varlıkları ve özellikleri içerir. Yalnızca kullanımdan kaldırılmış biçimler dağıtım olarak listelenir.",
 	"dataset-dump-title": "Varlık dökümü $1",
 	"dataset-dump-description": "Belirli bir tarih için tüm varlıkların statik bir dökümü.",
 	"distribution-ld-description": "Bağlantılı Veri son noktası. Format, içerik müzakeresi yoluyla çözüldü.",

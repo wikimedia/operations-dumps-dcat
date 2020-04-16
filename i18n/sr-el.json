@@ -1,5 +1,7 @@
 {
-	"@metadata": [],
+	"@metadata": {
+		"authors": []
+	},
 	"dataset-live-title": "Pristup uživo",
 	"dataset-live-description": "Aktivna verzija podataka, uključujući entitete i svojstva. Samo nezastareli formati su navedeni kao distribucije.",
 	"dataset-dump-title": "Prikaz stanja entiteta $1",

@@ -2,10 +2,15 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
-			"F3RaN"
+			"F3RaN",
+			"Mguix"
 		]
 	},
 	"dataset-live-title": "Accés directe",
 	"dataset-live-description": "La versió en directe de les dades, inclou les entitats i propietats. Només formats no obsolets estan catalogats com a distribucions.",
-	"dataset-dump-title": "Abocament d'entitats de $1"
+	"dataset-dump-title": "Abocament d'entitats de $1",
+	"dataset-dump-description": "Un bolcat estàtic de totes les entitats per a la data indicada.",
+	"distribution-ld-description": "L'extrem de les dades vinculades. El format es resol a través de la negociació de contingut.",
+	"distribution-api-description": "L'extrem de l'API del MediaWiki.  El format es dóna a través del paràmetre «format».",
+	"distribution-dump-description": "Un arxiu $1 comprimit amb $2."
 }

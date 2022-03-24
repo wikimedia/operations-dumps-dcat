@@ -419,8 +419,10 @@ function writePublisher( XMLWriter $xml, array $data ) {
 			$data['config']['publisher']['publisherType'] );
 	$xml->endElement();
 
-	$xml->writeElementNS( 'foaf', 'homepage', null,
+	$xml->startElementNS( 'foaf', 'homepage', null );
+	$xml->writeAttribute( 'rdf:resource',
 		$data['config']['publisher']['homepage'] );
+	$xml->endElement();
 
 	$xml->startElementNS( 'vcard', 'hasEmail', null );
 	$xml->writeAttribute( 'rdf:resource',
@@ -512,8 +514,10 @@ function writeCatalog( XMLWriter $xml, array $data, array $dataset ) {
 		'http://eurovoc.europa.eu/' );
 	$xml->endElement();
 
-	$xml->writeElementNS( 'foaf', 'homepage', null,
+	$xml->startElementNS( 'foaf', 'homepage', null );
+	$xml->writeAttribute( 'rdf:resource',
 		$data['config']['catalog-homepage'] );
+	$xml->endElement();
 
 	$xml->startElementNS( 'dcterms', 'modified', null );
 	$xml->writeAttribute( 'rdf:datatype',

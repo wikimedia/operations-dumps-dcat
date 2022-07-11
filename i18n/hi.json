@@ -2,14 +2,15 @@
 	"@metadata": {
 		"authors": [
 			"Sachinkatiyar",
+			"Saurmandal",
 			"चक्रपाणी"
 		]
 	},
 	"dataset-live-title": "लाइव पहुँच",
-	"dataset-live-description": "डेटा के लाइव संस्करण में संस्थाएं और गुण शामिल हैं। केवल गैर-बहिष्कृत स्वरूप को वितरण के रूप में सूचीबद्ध किया गया है।",
-	"dataset-dump-title": "$1 का डंप",
-	"dataset-dump-description": "सभी संस्थाओं का एक स्थिर डंप दी गई तारीख के लिए।",
-	"distribution-ld-description": "लिंक किए गए डेटा समापन बिंदु। प्रारूप वार्ता के माध्यम से प्रारूप का समाधान होता है।",
-	"distribution-api-description": "मिडियाविकि एपीआई समापन बिंदु। प्रारूप \"प्रारूप\" पैरामीटर के माध्यम से दिया जाता है।",
-	"distribution-dump-description": "A $1 फ़ाइल, $2 संपीङित।"
+	"dataset-live-description": "डेटा का लाइव संस्करण, जिसमें सत्ते और गुणधर्म मौजूद हैं। सिर्फ गैर-कालग्रस्त प्रारूपों को ही प्रकाशनों के रूप में सूचीबद्ध किया गया है।",
+	"dataset-dump-title": "$1 का सत्ता डम्प",
+	"dataset-dump-description": "निर्धारित दिनांक में सभी सत्तों का एक स्थिर डम्प।",
+	"distribution-ld-description": "जुड़े हुए डेटा का एंडपॉइंट। प्रारूप को सामग्री के समझौते से तय किया जाता है।",
+	"distribution-api-description": "मीडियाविकि API का एंटपॉइंट। प्रारूप \"format\" पैरामीटर के ज़रिए तय किया जाता है।",
+	"distribution-dump-description": "एक $1 फ़ाइल, $2 में संकुचित।"
 }

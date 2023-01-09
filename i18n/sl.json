@@ -5,10 +5,10 @@
 		]
 	},
 	"dataset-live-title": "Neposredni dostop",
-	"dataset-live-description": "Sprotno posodabljana različica podatkov v živo vključuje entitete in lastnosti. Kot distribucije so navedeni samo formati, ki niso zastareli.",
+	"dataset-live-description": "Sprotno posodabljana različica podatkov v živo vključuje entitete in lastnosti. Kot distribucije so navedeni samo formati, ki niso opuščeni.",
 	"dataset-dump-title": "Datum izpisa entitet: $1",
 	"dataset-dump-description": "Statični izpis vseh entitet za dani datum.",
 	"distribution-ld-description": "Končna točka povezanih podatkov. Format se razrešuje s pogajanji o vsebini.",
-	"distribution-api-description": "Končna točka API-ja MediaWiki. Format je podan s parametrom »format«.",
+	"distribution-api-description": "Končna točka API-ja MediaWikija. Format je podan s parametrom »format«.",
 	"distribution-dump-description": "Datoteka $1, stisnjena v $2."
 }

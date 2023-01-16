@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"McDutchie"
+		]
+	},
+	"dataset-live-title": "Accesso in directo",
+	"dataset-live-description": "Le version in tempore real del datos, include entitates e proprietates. Solmente formatos non obsolescente es listate como distributiones.",
+	"dataset-dump-title": "Instantaneo de entitates del $1",
+	"dataset-dump-description": "Un instantaneos static de tote le entitates al data date.",
+	"distribution-ld-description": "Le puncto terminal de datos ligate. Le formato se decide per negotiation de contento.",
+	"distribution-api-description": "Le puncto terminal del API de MediaWiki. Le formato es date per le parametro \"format\".",
+	"distribution-dump-description": "Un file $1, comprimite in $2."
+}

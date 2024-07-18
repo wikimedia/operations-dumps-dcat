@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Joseagush"
+		]
+	},
+	"dataset-live-title": "Aksés langsung",
+	"dataset-live-description": "Versi data langsung, ngranjing entitas miwah properti. Wantah format sané nénten kawedar sané kasurat pinaka distribusi.",
+	"dataset-dump-title": "Entitas kakutang $1",
+	"dataset-dump-description": "Sampel statis saking samian entitas antuk tanggal sané kaicén.",
+	"distribution-ld-description": "Titik Pranala Data sané mapaiketan. Format kapuputang majalaran antuk negosiasi padagingan.",
+	"distribution-api-description": "Titik ungkur API MediaWiki. Format kaicénin nganggén parameter \"format\".",
+	"distribution-dump-description": "A $1 berkas, $2 kakomprési."
+}

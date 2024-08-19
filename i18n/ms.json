@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Hakimi97"
+		]
+	},
+	"dataset-live-title": "Capaian langsung",
+	"dataset-live-description": "Versi langsung data, termasuk entiti dan sifat. Hanya format yang tidak ditamatkan disenaraikan untuk pengedaran.",
+	"dataset-dump-title": "Lambakan entiti $1",
+	"dataset-dump-description": "Lambakan statik semua entiti untuk tarikh yang diberikan.",
+	"distribution-ld-description": "Titik akhir Data Terpaut. Format diselesaikan melalui rundingan kandungan.",
+	"distribution-api-description": "Titik akhir API MediaWiki. Format diberikan melalui parameter \"format\".",
+	"distribution-dump-description": "Fail $1, $2 dimampatkan."
+}

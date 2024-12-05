@@ -2,9 +2,15 @@
 	"@metadata": {
 		"authors": [
 			"Aftabuzzaman",
+			"AnonQuester",
 			"আফতাবুজ্জামান"
 		]
 	},
 	"dataset-live-title": "সরাসরি প্রবেশাধিকার",
+	"dataset-live-description": "ডেটার লাইভ সংস্করণে সত্তা (entity) এবং প্রোপার্টি অন্তর্ভুক্ত রয়েছে। কেবলমাত্র নন-ডিপ্রিকেটেড ফরম্যাটগুলো বিতরণ হিসেবে তালিকাভুক্ত।",
+	"dataset-dump-title": "$1-এর সত্তার ডাম্প:",
+	"dataset-dump-description": "নির্দিষ্ট তারিখের জন্য সমস্ত সত্তার একটি স্ট্যাটিক ডাম্প।",
+	"distribution-ld-description": "লিঙ্কড ডেটা এন্ডপয়েন্ট। ফরম্যাট কনটেন্ট নেগোশিয়েশনের মাধ্যমে নির্ধারিত হয়।",
+	"distribution-api-description": "মিডিয়াউইকি API এন্ডপয়েন্ট। ফরম্যাট \"format\" প্যারামিটারের মাধ্যমে সরবরাহ করা হয়।",
 	"distribution-dump-description": "একটি $1 ফাইল, $2-এ সঙ্কুচিত।"
 }

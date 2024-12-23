@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Chinmayee Mishra"
+		]
+	},
+	"dataset-live-title": "ଲାଇଭ୍ ଆକ୍ସେସ୍",
+	"dataset-live-description": "ତଥ୍ୟର ଲାଇଭ୍ ସଂସ୍କରଣ, ସଂସ୍ଥା ଏବଂ ଗୁଣଗୁଡିକ ଅନ୍ତର୍ଭୁକ୍ତ କରେ | କେବଳ ଅଣ-ପୁରୁଣା ଫର୍ମାଟଗୁଡିକ ବଣ୍ଟନ ଭାବରେ ତାଲିକାଭୁକ୍ତ |",
+	"dataset-dump-title": "$୧ ର ସଂସ୍ଥା ଡମ୍ପ",
+	"dataset-dump-description": "ପ୍ରଦତ୍ତ ତାରିଖ ପାଇଁ ସମସ୍ତ ସଂସ୍ଥାର ଏକ ଷ୍ଟାଟିକ୍ ଡମ୍ପ୍ |",
+	"distribution-ld-description": "ଲିଙ୍କ୍ ହୋଇଥିବା ଡାଟା ଶେଷ ପଏଣ୍ଟ | ବିଷୟବସ୍ତୁ ବୁ ation ାମଣା ମାଧ୍ୟମରେ ଫର୍ମାଟ୍ ସମାଧାନ ହୁଏ |",
+	"distribution-api-description": "ମିଡିଆ ୱିକି API ଶେଷ ପଏଣ୍ଟ | ଫର୍ମାଟ୍ “ଫର୍ମାଟ୍” ପାରାମିଟର ମାଧ୍ୟମରେ ଦିଆଯାଏ |",
+	"distribution-dump-description": "ଏକ $1 ଫାଇଲ୍, $2 ସଙ୍କୋଚିତ |"
+}

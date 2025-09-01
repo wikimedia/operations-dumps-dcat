@@ -1,0 +1,10 @@
+{
+	"@metadata": {
+		"authors": [
+			"YeBoy371",
+			"Ykhwong"
+		]
+	},
+	"dataset-dump-title": "$1의 개체 덤프",
+	"distribution-dump-description": "$1 형식의 파일, $2로 압축됨."
+}

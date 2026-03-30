@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Aindriu80"
+		]
+	},
+	"dataset-live-title": "Rochtain bheo",
+	"dataset-live-description": "Áirítear leis an leagan beo de na sonraí eintitis agus airíonna. Níl ach formáidí neamh-imithe liostaithe mar dháiltí.",
+	"dataset-dump-title": "Dumpáil eintitis de $1",
+	"dataset-dump-description": "Dumpáil statach de na heintitis uile don dáta tugtha.",
+	"distribution-ld-description": "An críochphointe Sonraí Nasctha. Réitítear an fhormáid trí idirbheartaíocht ábhair.",
+	"distribution-api-description": "Críochphointe API MediaWiki. Tugtar an fhormáid tríd an bparaiméadar \"format\".",
+	"distribution-dump-description": "Comhad $1, $2 comhbhrúite."
+}

@@ -1,10 +1,16 @@
 {
 	"@metadata": {
 		"authors": [
+			"Tensama0415",
 			"YeBoy371",
 			"Ykhwong"
 		]
 	},
+	"dataset-live-title": "실시간 접속",
+	"dataset-live-description": "데이터의 최신 버전에는 개체와 속성이 포함됩니다. 배포 목록에는 구식 형식이 아닌 형식만 표시됩니다.",
 	"dataset-dump-title": "$1의 개체 덤프",
+	"dataset-dump-description": "지정된 날짜의 모든 개체에 대한 정적 덤프입니다.",
+	"distribution-ld-description": "링크된 데이터 엔드포인트입니다. 형식은 콘텐츠 협상을 통해 해결됩니다.",
+	"distribution-api-description": "미디어위키 API 종단점입니다. 형식은 \"format\" 매개변수를 통해 지정됩니다.",
 	"distribution-dump-description": "$1 형식의 파일, $2로 압축됨."
 }

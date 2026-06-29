@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Wizzard"
+		]
+	},
+	"dataset-live-title": "Živý prístup",
+	"dataset-live-description": "Živá verzia údajov, zahŕňa entity a vlastnosti. Ako distribúcie sú uvedené iba nezastarané formáty.",
+	"dataset-dump-title": "Výpis entít z $1",
+	"dataset-dump-description": "Statický výpis všetkých entít k danému dátumu.",
+	"distribution-ld-description": "Koncový bod Linked Data. Formát sa určuje pomocou vyjednávania o obsahu.",
+	"distribution-api-description": "Koncový bod MediaWiki API. Formát sa zadáva parametrom „format“.",
+	"distribution-dump-description": "Súbor $1, komprimovaný pomocou $2."
+}
